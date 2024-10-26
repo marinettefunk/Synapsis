@@ -26,7 +26,12 @@ int getConsoleWidth() {
     // Default width if unable to detect
     return 80;
 }
+void centerText(const std::string& text) {
+    int width = getConsoleWidth();
+    int padding = (width - text.length()) / 2;
 
+    std::cout << std::string(padding, ' ') << text << std::endl;
+}
 void smoothFadeInLine(const std::string& text) {
     // Print line with each character gradually appearing
     for (size_t i = 0; i < text.length(); ++i) {
@@ -48,6 +53,7 @@ void message() {
     smoothFadeInLine("HELLO, I'M");
     printLogo();
     smoothFadeInLine("YOUR VIRTUAL ASSISTANT");
-
+    std::cout << std::endl;
+    centerText("What can I help you with?");
     
 }
