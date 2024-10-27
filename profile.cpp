@@ -149,7 +149,7 @@ void printProfile() {
 
 // Utility function to pause and wait for user input before returning to the menu
 void pauseForReturn() {
-    std::cout << "\nPress Enter to return to the menu...";
+    std::cout << "\n>>>>> Press Enter to return to the menu <<<<<<";
     std::cin.ignore(std::numeric_limits<std::streamsize>::max(), '\n');
 }
 
@@ -227,7 +227,9 @@ void profileSettings(std::string& name, std::string& password) {
                 break;
             case 5:
                 std::cout << "Returning to the main menu..." << std::endl;
-
+                system(CLEAR_COMMAND); // Clear the screen after profile creation
+                printLogo();
+                std::cout << std::endl;
                 printMenu();
                 break;
             default:
