@@ -11,6 +11,7 @@ void printLogo() {
 }
 
 void message() {
+    dateTime();
     fadeIn("HELLO, I'M");
     printLogo();
     fadeIn("YOUR VIRTUAL ASSISTANT");

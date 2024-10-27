@@ -96,6 +96,7 @@ void createProfile(std::string& name, std::string& password) {
    
     std::cout << "Profile created successfully!" << std::endl;
     system(CLEAR_COMMAND); // Clear the screen after profile creation
+    dateTime();
     printLogo();
     std::cout << std::endl;
     std::cout << "Hello, " << name << "! What can I help you with today?" << std::endl;
@@ -121,6 +122,7 @@ void runProgram() {
 
         if (inputPassword == password) {
             system(CLEAR_COMMAND); // Clear the screen after successful login
+            dateTime();
             printLogo();
             std::cout << std::endl;
             std::cout << "Hello, " + name + "! What can I help you with today?" << std::endl;
@@ -136,6 +138,7 @@ void runProgram() {
 
 void printProfile() {
     system(CLEAR_COMMAND); // Clear the screen
+    dateTime();
     printLogo();
     std::cout << std::endl;
     printBorder("PROFILE SETTINGS");
@@ -227,7 +230,9 @@ void profileSettings(std::string& name, std::string& password) {
                 break;
             case 5:
                 std::cout << "Returning to the main menu..." << std::endl;
+                dateTime();
                 system(CLEAR_COMMAND); // Clear the screen after profile creation
+                dateTime();
                 printLogo();
                 std::cout << std::endl;
                 printMenu();

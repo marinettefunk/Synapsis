@@ -66,3 +66,23 @@ void printBorder(const std::string& message) {
     }
     std::cout << "╯" << std::endl;
 }
+
+void dateTime() {
+    // Declaring argument for time() 
+    time_t tt;
+
+    // Declaring variable to store return value of localtime() 
+    struct tm* ti;
+
+    // Applying time() 
+    time(&tt);
+
+    // Using localtime() 
+    ti = localtime(&tt);
+
+    // Get the console width
+    int width = getConsoleWidth();
+
+    // Print the date and time, aligned to the right
+    std::cout << std::setw(width) << std::right << asctime(ti);
+}
