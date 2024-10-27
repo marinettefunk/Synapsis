@@ -1,7 +1,7 @@
-main: welcome.o main.o profile.o
-	g++ -std=c++11 welcome.o main.o profile.o -o main
+main: welcome.o main.o profile.o formatting.o
+	g++ -std=c++11 welcome.o main.o profile.o formatting.o -o main
 
-welcome.o: welcome.cpp welcome.h profile.h
+welcome.o: welcome.cpp welcome.h formatting.h
 	g++ -c -std=c++11 welcome.cpp
 
 profile.o: profile.cpp profile.h
@@ -9,6 +9,9 @@ profile.o: profile.cpp profile.h
 
 main.o: main.cpp welcome.h profile.h
 	g++ -c -std=c++11 main.cpp
+
+formatting.o: formatting.cpp formatting.h
+	g++ -c -std=c++11 formatting.cpp
 
 clean:
 	rm -f *.o main

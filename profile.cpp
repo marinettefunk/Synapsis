@@ -49,6 +49,7 @@ std::string getPassword() {
 }
 
 void printProfile() {
+    std::cout << "FIRST, LET'S CREATE YOUR PROFILE" << std::endl;
     nameConfirmation();
     getPassword();
 }
