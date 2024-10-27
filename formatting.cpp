@@ -13,19 +13,19 @@
 #endif
 
 int getConsoleWidth() {
-#if defined(_WIN32) || defined(_WIN64)
-    CONSOLE_SCREEN_BUFFER_INFO csbi;
-    if (GetConsoleScreenBufferInfo(GetStdHandle(STD_OUTPUT_HANDLE), &csbi)) {
-        return csbi.srWindow.Right - csbi.srWindow.Left + 1;
-    }
-#else
-    struct winsize w;
-    if (ioctl(STDOUT_FILENO, TIOCGWINSZ, &w) == 0) {
-        return w.ws_col;
-    }
-#endif
-    // Default width if unable to detect
-    return 80;
+    #if defined(_WIN32) || defined(_WIN64)
+        CONSOLE_SCREEN_BUFFER_INFO csbi;
+        if (GetConsoleScreenBufferInfo(GetStdHandle(STD_OUTPUT_HANDLE), &csbi)) {
+            return csbi.srWindow.Right - csbi.srWindow.Left + 1;
+        }
+    #else
+        struct winsize w;
+        if (ioctl(STDOUT_FILENO, TIOCGWINSZ, &w) == 0) {
+            return w.ws_col;
+        }
+    #endif
+        // Default width if unable to detect
+        return 80;
 }
 void centerText(const std::string& text) {
     int width = getConsoleWidth();
@@ -80,6 +80,12 @@ void dateTime() {
     // Using localtime() 
     ti = localtime(&tt);
 
+    // Get the length of the date and time string
+    std::string dateTimeStr = asctime(ti);
+
+    // Get the console width
+    int consoleWidth = getConsoleWidth();
+
     // Print the date and time, aligned to the right
-    std::cout << std::setw(30) << std::right << asctime(ti);
+    std::cout << std::setw(consoleWidth) << std::right << dateTimeStr;
 }
