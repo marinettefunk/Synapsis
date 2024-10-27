@@ -169,19 +169,41 @@ void viewProfile(const std::string& name, const std::string& password) {
 void changeName(std::string& name) {
     system(CLEAR_COMMAND);
     printBorder("CHANGE NAME");
-    name = getName();
-    nameConfirmation(name);
-    std::cout << "Name updated successfully to " << name << "!" << std::endl;
-    pauseForReturn();
+
+    std::cout << "Your name is currently " << name << ". Are you sure you want to change your name? (y/n): ";
+    char confirm;
+    std::cin >> confirm;
+    std::cin.ignore(); // ignore newline character
+
+    if (confirm == 'y' || confirm == 'Y') {
+        name = getName();
+        nameConfirmation(name);
+        std::cout << "Name updated successfully to " << name << "!" << std::endl;
+        pauseForReturn();
+    } else {
+        std::cout << "Name change cancelled." << std::endl;
+        pauseForReturn();
+    }
 }
 
 // Function to change the user's password
 void changePassword(std::string& password) {
     system(CLEAR_COMMAND);
     printBorder("CHANGE PASSWORD");
-    password = getPassword();
-    std::cout << "Password updated successfully!" << std::endl;
-    pauseForReturn();
+
+    std::cout << "Are you sure you want to change your password? (y/n): ";
+    char confirm;
+    std::cin >> confirm;
+    std::cin.ignore(); // ignore newline character
+
+    if (confirm == 'y' || confirm == 'Y') {
+        password = getPassword();
+        std::cout << "Password updated successfully!" << std::endl;
+        pauseForReturn();
+    } else {
+        std::cout << "Password change cancelled." << std::endl;
+        pauseForReturn();
+    }
 }
 
 // Function to delete the user's profile
