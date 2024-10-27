@@ -4,7 +4,7 @@
 #include <vector>
 #include <string>
 
-void printTable(const std::vector<std::vector<std::string>>& data);
-void runTableDisplay();
+void inputError(std::string message);
+void printMenu();
 
 #endif // MENU_H

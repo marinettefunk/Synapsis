@@ -10,7 +10,7 @@ int main() {
 
   runProgram();
 
-  runTableDisplay();
+  printMenu();
 
 
     return 0;

@@ -37,7 +37,7 @@ void saveUserData(const std::string& name, const std::string& password) {
 // Function to get user name
 std::string getName() {
     std::string name;
-    std::cout << "Please enter your name: ";
+    std::cout << ">>>>> Please enter your name: ";
     std::getline(std::cin, name);
     return name;
 }
@@ -46,14 +46,14 @@ std::string getName() {
 void nameConfirmation(std::string& name) {
     char confirm = '\0';
     do {
-        std::cout << "Your name is " << name << ". Is this correct? (y/n): ";
+        std::cout << ">>>>> Your name is " << name << ". Is this correct? (y/n): ";
         std::cin >> confirm;
         std::cin.ignore(std::numeric_limits<std::streamsize>::max(), '\n'); // ignore the newline character
 
         if (confirm == 'y' || confirm == 'Y') {
             break;
         } else if (confirm == 'n' || confirm == 'N') {
-            std::cout << "Please enter your name: ";
+            std::cout << ">>>>> Please enter your name: ";
             std::getline(std::cin, name);
         } else {
             std::cout << "Invalid input. Please enter 'y' or 'n'." << std::endl;
@@ -66,11 +66,11 @@ std::string getPassword() {
     std::string password;
     std::string confirmPassword;
 
-    std::cout << "Please enter your password: ";
+    std::cout << ">>>>> Please enter your password: ";
     std::getline(std::cin, password);
 
     while (true) {
-        std::cout << "Re-enter your password: ";
+        std::cout << ">>>>> Re-enter your password: ";
         std::getline(std::cin, confirmPassword);
 
         if (confirmPassword == password) {
@@ -106,17 +106,37 @@ void runProgram() {
     if (name.empty() || password.empty()) {
         createProfile(name, password);
     } else {
-        centerText( "Welcome back, " + name + "!");
+        std::cout << "Welcome back, " + name + "!"<< std::endl;
         std::string inputPassword;
-        centerText( "Please enter your password: ");
+        std::cout << ">>>>> Please enter your password: ";
         std::getline(std::cin, inputPassword);
 
         if (inputPassword == password) {
             system(CLEAR_COMMAND); // Clear the screen after successful login
             printLogo();
-            centerText("Hello, " + name + "! What can I help you with today?");
+            std::cout << std::endl;
+            std::cout << "Hello, " + name + "! What can I help you with today?" << std::endl;
+            std::cout << std::endl;
         } else {
             std::cout << "Incorrect password." << std::endl;
         }
     }
+}
+
+void printProfile (){
+    system(CLEAR_COMMAND); // Clear the screen after successful login
+    printLogo();
+    std::cout << std::endl;
+    printWithModernBorder("PROFILE SETTINGS");
+    std::cout << "1. View Profile" << std::endl;
+    std::cout << "2. Change Name" << std::endl;
+    std::cout << "3. Change Password" << std::endl;
+    std::cout << "4. Delete Profile" << std::endl;
+    std::cout << "5. Back to Main Menu" << std::endl;
+    std::cout << std::endl;
+
+    int choice;
+    std::cout << ">>>>> Please select an option: ";
+    std::cin >> choice;
+    
 }
