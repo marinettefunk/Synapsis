@@ -4,7 +4,7 @@ main: welcome.o main.o profile.o formatting.o
 welcome.o: welcome.cpp welcome.h formatting.h
 	g++ -c -std=c++11 welcome.cpp
 
-profile.o: profile.cpp profile.h
+profile.o: profile.cpp profile.h formatting.h
 	g++ -c -std=c++11 profile.cpp
 
 main.o: main.cpp welcome.h profile.h

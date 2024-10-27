@@ -1,9 +1,40 @@
 #include <iostream>
 #include <string>
+#include <fstream>
+#include <limits> // Required for numeric_limits
+#include "formatting.h"
+#include "welcome.h"
 
-#include <iostream>
-#include <string>
+#ifdef _WIN32
+#define CLEAR_COMMAND "cls" // Windows
+#else
+#define CLEAR_COMMAND "clear" // Unix/Linux, macOS
+#endif
 
+// Function to load user data from file
+void loadUserData(std::string& name, std::string& password) {
+    std::ifstream file("user_data.txt");
+    if (file.is_open()) {
+        std::getline(file, name);
+        std::getline(file, password);
+        file.close();
+    } else {
+        name = "";
+        password = "";
+    }
+}
+
+// Function to save user data to file
+void saveUserData(const std::string& name, const std::string& password) {
+    std::ofstream file("user_data.txt");
+    if (file.is_open()) {
+        file << name << std::endl;
+        file << password << std::endl;
+        file.close();
+    }
+}
+
+// Function to get user name
 std::string getName() {
     std::string name;
     std::cout << "Please enter your name: ";
@@ -11,45 +42,81 @@ std::string getName() {
     return name;
 }
 
-void nameConfirmation(){
-    std::string name = getName(); // Call getName() once and store the result
-    char confirm = '\0'; // Initialize with a default value
-
+// Function to confirm user name
+void nameConfirmation(std::string& name) {
+    char confirm = '\0';
     do {
         std::cout << "Your name is " << name << ". Is this correct? (y/n): ";
         std::cin >> confirm;
+        std::cin.ignore(std::numeric_limits<std::streamsize>::max(), '\n'); // ignore the newline character
+
         if (confirm == 'y' || confirm == 'Y') {
             break;
         } else if (confirm == 'n' || confirm == 'N') {
-            name = getName(); // Call getName() again if the user wants to change their name
+            std::cout << "Please enter your name: ";
+            std::getline(std::cin, name);
         } else {
             std::cout << "Invalid input. Please enter 'y' or 'n'." << std::endl;
         }
     } while (true);
 }
 
+// Function to get password
 std::string getPassword() {
     std::string password;
     std::string confirmPassword;
 
     std::cout << "Please enter your password: ";
-    std::cin.ignore(); // ignore the newline character
     std::getline(std::cin, password);
 
-    do {
+    while (true) {
         std::cout << "Re-enter your password: ";
         std::getline(std::cin, confirmPassword);
 
-        if (password != confirmPassword) {
+        if (confirmPassword == password) {
+            break;
+        } else {
             std::cout << "Passwords do not match. Please try again." << std::endl;
         }
-    } while (password != confirmPassword);
+    }
 
     return password;
 }
 
-void printProfile() {
-    std::cout << "FIRST, LET'S CREATE YOUR PROFILE" << std::endl;
-    nameConfirmation();
-    getPassword();
+// Function to create a profile
+void createProfile(std::string& name, std::string& password) {
+    std::string message = "FIRST, LET'S CREATE YOUR PROFILE";
+    printWithModernBorder(message);
+    name = getName();
+    nameConfirmation(name);
+    password = getPassword();
+    saveUserData(name, password);
+
+    system(CLEAR_COMMAND); // Clear the screen after profile creation
+    std::cout << "Profile created successfully!\nHello, " << name << "! What can I help you with today?" << std::endl;
+}
+
+// Function to run the program
+void runProgram() {
+    std::string name;
+    std::string password;
+
+    loadUserData(name, password);
+
+    if (name.empty() || password.empty()) {
+        createProfile(name, password);
+    } else {
+        centerText( "Welcome back, " + name + "!");
+        std::string inputPassword;
+        centerText( "Please enter your password: ");
+        std::getline(std::cin, inputPassword);
+
+        if (inputPassword == password) {
+            system(CLEAR_COMMAND); // Clear the screen after successful login
+            printLogo();
+            centerText("Hello, " + name + "! What can I help you with today?");
+        } else {
+            std::cout << "Incorrect password." << std::endl;
+        }
+    }
 }

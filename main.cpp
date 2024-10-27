@@ -6,6 +6,9 @@ using namespace std;
 
 int main() {
     message();
-    printProfile();
+
+  runProgram();
+
+
     return 0;
 }
