@@ -4,6 +4,8 @@
 #include <chrono>
 #include <thread>
 
+#include "profile.h"
+
 #if defined(_WIN32) || defined(_WIN64)
     #include <windows.h>
 #else
@@ -36,17 +38,18 @@ void smoothFadeInLine(const std::string& text) {
     // Print line with each character gradually appearing
     for (size_t i = 0; i < text.length(); ++i) {
         std::cout << text[i] << std::flush;
-        std::this_thread::sleep_for(std::chrono::milliseconds(100)); // Adjust for speed
+        std::this_thread::sleep_for(std::chrono::milliseconds(50)); // Adjust for speed
     }
     std::cout << std::endl;
 }
 
 void printLogo() {
-    std::cout << "█████  ██  ██  ██████  ██████  ██████  █████  ██  █████\n";
-    std::cout << "██     ██  ██  ██  ██  ██  ██  ██  ██  ██     ██  ██ \n";
-    std::cout << "█████  ██████  ██  ██  ██████  ██████  █████  ██  █████\n";
-    std::cout << "   ██    ██    ██  ██  ██  ██  ██         ██  ██     ██\n";
-    std::cout << "█████    ██    ██  ██  ██  ██  ██      █████  ██  █████\n";
+    std::cout << "█████╗  ██╗ ██╗  ██████╗  ██████╗  ██████╗  █████╗  ██╗  █████╗\n";
+    std::cout << "██═══╝  ██║ ██║  ██║ ██║  ██║ ██║  ██║ ██║  ██═══╝  ██║  ██═══╝\n";
+    std::cout << "█████╗  ██████╝  ██║ ██║  ██████║  ██████╝  █████║  ██║  █████╗\n";
+    std::cout << "   ██║    ██║    ██║ ██║  ██║ ██║  ██║         ██║  ██║     ██║\n";
+    std::cout << "█████║    ██║    ██║ ██║  ██║ ██║  ██║      █████║  ██║  █████║\n";
+    std::cout << "╚════╝    ╚═╝    ╚═╝ ╚═╝  ╚═╝ ╚═╝  ╚═╝      ╚════╝  ╚═╝  ╚════╝\n";
 }
 
 void message() {
@@ -54,6 +57,4 @@ void message() {
     printLogo();
     smoothFadeInLine("YOUR VIRTUAL ASSISTANT");
     std::cout << std::endl;
-    centerText("What can I help you with?");
-    
 }

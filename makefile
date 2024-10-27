@@ -1,10 +1,13 @@
-main: welcome.o main.o
-	g++ -std=c++11 welcome.o main.o -o main
+main: welcome.o main.o profile.o
+	g++ -std=c++11 welcome.o main.o profile.o -o main
 
-welcome.o: welcome.cpp welcome.h
+welcome.o: welcome.cpp welcome.h profile.h
 	g++ -c -std=c++11 welcome.cpp
 
-main.o: main.cpp welcome.h
+profile.o: profile.cpp profile.h
+	g++ -c -std=c++11 profile.cpp
+
+main.o: main.cpp welcome.h profile.h
 	g++ -c -std=c++11 main.cpp
 
 clean:

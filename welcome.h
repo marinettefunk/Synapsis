@@ -1,6 +1,6 @@
 # ifndef WELCOME_H
 # define WELCOME_H
 
-void message ();
+void message();
 
 # endif // WELCOME_H
