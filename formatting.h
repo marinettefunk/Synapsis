@@ -5,6 +5,7 @@
 
 int getConsoleWidth();
 void centerText(const std::string& text);
+std::string getCenteredText(const std::string& text);
 void smoothFadeInLine(const std::string& text);
 void printWithModernBorder(const std::string& message);
 

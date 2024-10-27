@@ -30,8 +30,13 @@ int getConsoleWidth() {
 void centerText(const std::string& text) {
     int width = getConsoleWidth();
     int padding = (width - text.length()) / 2;
+    std::cout << std::string(padding, ' ') << text << std::string(width - text.length() - padding, ' ') << std::endl;
+}
 
-    std::cout << std::string(padding, ' ') << text << std::endl;
+std::string getCenteredText(const std::string& text) {
+    int width = getConsoleWidth();
+    int padding = (width - text.length()) / 2;
+    return std::string(padding, ' ') + text + std::string(width - text.length() - padding, ' ');
 }
 void smoothFadeInLine(const std::string& text) {
     // Print line with each character gradually appearing
