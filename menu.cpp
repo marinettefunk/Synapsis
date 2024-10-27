@@ -5,6 +5,7 @@
 #include "formatting.h"
 #include "errors.h"
 #include "profile.h"
+#include "files.h"
 
 int choice() {
     int choice;
@@ -26,7 +27,9 @@ void printMenu() {
     printBorder("MENU");
     std::cout << "1. Profile Settings" << std::endl;
     std::cout << "2. File Organiser" << std::endl;
-    std::cout << "3. Exit" << std::endl;
+    std::cout << "3. Calculator" << std::endl;
+    std::cout << "4. Chat Bot" << std::endl;
+    std::cout << "5. Exit" << std::endl;
     std::cout << std::endl;
 
     int selectedChoice = choice();
@@ -39,7 +42,7 @@ void printMenu() {
             break;
         }
         case 2:
-            // Add functionality for File Organiser here
+            printFileOrganiser();
             break;
         case 3:
             // Add functionality for Exit here

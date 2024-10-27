@@ -80,9 +80,6 @@ void dateTime() {
     // Using localtime() 
     ti = localtime(&tt);
 
-    // Get the console width
-    int width = getConsoleWidth();
-
     // Print the date and time, aligned to the right
-    std::cout << std::setw(width) << std::right << asctime(ti);
+    std::cout << std::setw(30) << std::right << asctime(ti);
 }
