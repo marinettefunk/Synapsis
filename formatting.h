@@ -6,7 +6,7 @@
 int getConsoleWidth();
 void centerText(const std::string& text);
 std::string getCenteredText(const std::string& text);
-void smoothFadeInLine(const std::string& text);
-void printWithModernBorder(const std::string& message);
+void fadeIn(const std::string& text);
+void printBorder(const std::string& message);
 
 #endif // FORMATTING_H

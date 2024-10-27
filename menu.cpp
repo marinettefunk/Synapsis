@@ -23,7 +23,7 @@ int choice() {
 }
 
 void printMenu() {
-    printWithModernBorder("MENU");
+    printBorder("MENU");
     std::cout << "1. Profile Settings" << std::endl;
     std::cout << "2. File Organiser" << std::endl;
     std::cout << "3. Exit" << std::endl;
@@ -32,9 +32,12 @@ void printMenu() {
     int selectedChoice = choice();
 
     switch (selectedChoice) {
-        case 1:
-            printProfile();
+        case 1: {
+            std::string name, password;
+            loadUserData(name, password);
+            profileSettings(name, password);
             break;
+        }
         case 2:
             // Add functionality for File Organiser here
             break;

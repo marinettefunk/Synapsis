@@ -11,8 +11,8 @@ void printLogo() {
 }
 
 void message() {
-    smoothFadeInLine("HELLO, I'M");
+    fadeIn("HELLO, I'M");
     printLogo();
-    smoothFadeInLine("YOUR VIRTUAL ASSISTANT");
+    fadeIn("YOUR VIRTUAL ASSISTANT");
     std::cout << std::endl;
 }

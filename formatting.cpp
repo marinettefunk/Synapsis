@@ -38,7 +38,7 @@ std::string getCenteredText(const std::string& text) {
     int padding = (width - text.length()) / 2;
     return std::string(padding, ' ') + text + std::string(width - text.length() - padding, ' ');
 }
-void smoothFadeInLine(const std::string& text) {
+void fadeIn(const std::string& text) {
     // Print line with each character gradually appearing
     for (size_t i = 0; i < text.length(); ++i) {
         std::cout << text[i] << std::flush;
@@ -46,7 +46,7 @@ void smoothFadeInLine(const std::string& text) {
     }
     std::cout << std::endl;
 }
-void printWithModernBorder(const std::string& message) {
+void printBorder(const std::string& message) {
     int length = message.length();
 
     // Print top border with corners
