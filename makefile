@@ -1,4 +1,4 @@
-main: welcome.o main.o profile.o menu.o formatting.o errors.o files.o weather.o calculator.o
+main: welcome.o main.o profile.o menu.o formatting.o errors.o files.o weather.o calculator.o chat.o
 	g++ -std=c++11 welcome.o main.o profile.o menu.o formatting.o errors.o files.o weather.o calculator.o -o main
 
 welcome.o: welcome.cpp welcome.h formatting.h
@@ -27,6 +27,9 @@ weather.o: weather.cpp weather.h welcome.h formatting.h
 
 calculator.o: calculator.cpp calculator.h welcome.h formatting.h
 	g++ -c -std=c++11 calculator.cpp
+
+chat.o: chat.cpp chat.h
+	g++ -c -std=c++11 chat.cpp
 
 clean:
 	rm -f *.o main
