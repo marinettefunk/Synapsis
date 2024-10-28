@@ -6,7 +6,7 @@
 #include "errors.h"
 #include "profile.h"
 #include "files.h"
-#include "weather.h"
+#include "notes.h"
 #include "calculator.h"
 
 int choice() {
@@ -30,7 +30,7 @@ void printMenu() {
     std::cout << "1. Profile Settings" << std::endl;
     std::cout << "2. File Organiser" << std::endl;
     std::cout << "3. Calculator" << std::endl;
-    std::cout << "4. Weather" << std::endl;
+    std::cout << "4. Notes App" << std::endl;
     std::cout << "5. Exit" << std::endl;
     std::cout << std::endl;
 
@@ -50,7 +50,7 @@ void printMenu() {
             calculator();
             break;
         case 4:
-            // Add functionality for Weather here
+            // Add functionality for notes here
             break;
         case 5:
             // Add functionality for Exit here
