@@ -44,7 +44,7 @@ void printMenu() {
             break;
         }
         case 2:
-            printFileOrganiser();
+            fileOrganiserApp();
             break;
         case 3:
             calculator();

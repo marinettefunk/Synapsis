@@ -3,5 +3,6 @@
 
 void printFileOrganiser();
 void path();
+void fileOrganiserApp();
 
 #endif // FILES_H
