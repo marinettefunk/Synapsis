@@ -5,14 +5,26 @@
 #include "formatting.h"
 #include "welcome.h"
 #include "menu.h"
+#include "errors.h"
 
+// Commands to clear the screen for operating system cross-platform compatibility with program.
 #ifdef _WIN32
-#define CLEAR_COMMAND "cls" // Windows
+#define CLEAR_COMMAND "cls" // Windows Clear Command.
 #else
-#define CLEAR_COMMAND "clear" // Unix/Linux, macOS
+#define CLEAR_COMMAND "clear" // Unix/Linux and macOS Clear Command.
 #endif
 
-// Function to load user data from file
+// Function to save user data to a file.
+void saveUserData(const std::string& name, const std::string& password) {
+    std::ofstream file("user_data.txt"); // File is opened in write mode.
+    if (file.is_open()) { // If file is open, write to it.
+        file << name << std::endl;
+        file << password << std::endl;
+        file.close(); // File is closed once desired data is writen in.
+    }
+}
+
+// Function to load user data from a file.
 void loadUserData(std::string& name, std::string& password) {
     std::ifstream file("user_data.txt");
     if (file.is_open()) {
@@ -25,44 +37,33 @@ void loadUserData(std::string& name, std::string& password) {
     }
 }
 
-// Function to save user data to file
-void saveUserData(const std::string& name, const std::string& password) {
-    std::ofstream file("user_data.txt");
-    if (file.is_open()) {
-        file << name << std::endl;
-        file << password << std::endl;
-        file.close();
-    }
-}
-
-// Function to get user name
+// Function to get the user's name.
 std::string getName() {
     std::string name;
     std::cout << ">>>>> Please enter your name: ";
     std::getline(std::cin, name);
+    inputError("Invalid input. Please enter your name.");
     return name;
 }
 
-// Function to confirm user name
+// Function to confirm the user's name.
 void nameConfirmation(std::string& name) {
     char confirm = '\0';
     do {
         std::cout << ">>>>> Your name is " << name << ". Is this correct? (y/n): ";
         std::cin >> confirm;
-        std::cin.ignore(std::numeric_limits<std::streamsize>::max(), '\n'); // ignore the newline character
-
+        inputError("Invalid input. Please enter 'y' or 'n'.");
         if (confirm == 'y' || confirm == 'Y') {
             break;
         } else if (confirm == 'n' || confirm == 'N') {
-            std::cout << ">>>>> Please enter your name: ";
-            std::getline(std::cin, name);
+            getName();
         } else {
             std::cout << "Invalid input. Please enter 'y' or 'n'." << std::endl;
         }
     } while (true);
 }
 
-// Function to get password
+// Function to get and confrim the user's password.
 std::string getPassword() {
     std::string password;
     std::string confirmPassword;
@@ -84,60 +85,57 @@ std::string getPassword() {
     return password;
 }
 
-// Function to create a profile
+// Function to create a profile when program is first run.
 void createProfile(std::string& name, std::string& password) {
-    std::string message = "FIRST, LET'S CREATE YOUR PROFILE";
-    printBorder(message);
+    printBorder("FIRST, LET'S CREATE YOUR PROFILE");
+
     name = getName();
     nameConfirmation(name);
     password = getPassword();
     saveUserData(name, password);
 
-   
     std::cout << "Profile created successfully!" << std::endl;
-    system(CLEAR_COMMAND); // Clear the screen after profile creation
-    dateTime();
-    printLogo();
-    std::cout << std::endl;
-    std::cout << "Hello, " << name << "! What can I help you with today?" << std::endl;
-    std::cout << std::endl;
-    printMenu();
+    system(CLEAR_COMMAND); // Clear the screen after profile creation.
 
+    printMenu(name);
 }
 
-// Function to run the program
-void runProgram() {
+// Function on program start based on user data.
+std::string runProgram() {
     std::string name;
     std::string password;
 
     loadUserData(name, password);
 
-    if (name.empty() || password.empty()) {
+    if (name.empty() || password.empty()) { // If the user has not created a profile yet, create one.
         createProfile(name, password);
     } else {
-        std::cout << "Welcome back, " + name + "!"<< std::endl;
+        std::cout << "Welcome back, " + name + "!" << std::endl;
         std::string inputPassword;
-        std::cout << ">>>>> Please enter your password: ";
-        std::getline(std::cin, inputPassword);
+        bool loginSuccessful = false;
 
-        if (inputPassword == password) {
-            system(CLEAR_COMMAND); // Clear the screen after successful login
-            dateTime();
-            printLogo();
-            std::cout << std::endl;
-            std::cout << "Hello, " + name + "! What can I help you with today?" << std::endl;
-            std::cout << std::endl;
-        } else {
-            std::cout << "Incorrect password." << std::endl;
-            std::string inputPassword;
+        while (!loginSuccessful) {
             std::cout << ">>>>> Please enter your password: ";
             std::getline(std::cin, inputPassword);
+
+            if (inputPassword == password) {
+                loginSuccessful = true;
+            } else {
+                std::cout << "Incorrect password. Please try again." << std::endl;
+            }
+        }
+
+        if (loginSuccessful) {
+            system(CLEAR_COMMAND); // Clear the screen after successful login.
         }
     }
+
+    return name;
 }
 
-void printProfile() {
-    system(CLEAR_COMMAND); // Clear the screen
+// Function to display the Profile Settings Menu.
+void printProfileSettingsMenu() {
+    system(CLEAR_COMMAND);
     dateTime();
     printLogo();
     std::cout << std::endl;
@@ -150,22 +148,30 @@ void printProfile() {
     std::cout << std::endl;
 }
 
-// Utility function to pause and wait for user input before returning to the menu
+// Utility function to pause and wait for user input before returning to the menu.
 void pauseForReturn() {
     std::cout << "\n>>>>> Press Enter to return to the menu <<<<<<";
-    std::cin.ignore(std::numeric_limits<std::streamsize>::max(), '\n');
+    char input;
+    while (true) {
+        std::cin.get(input);
+        if (input == '\n') {
+            break;
+        } else {
+            inputError("Invalid input. Please press Enter to return to the menu.");
+        }
+    }
 }
 
-// Function to display the user's profile
+// Function to display the user's profile.
 void viewProfile(const std::string& name, const std::string& password) {
     system(CLEAR_COMMAND);
     printBorder("VIEW PROFILE");
     std::cout << "Name: " << name << std::endl;
-    std::cout << "Password: " << std::string(password.length(), '*') << std::endl; // Mask the password for security
+    std::cout << "Password: " << std::string(password.length(), '*') << std::endl; // Mask the password for security.
     pauseForReturn();
 }
 
-// Function to change the user's name
+// Function to change the user's name.
 void changeName(std::string& name) {
     system(CLEAR_COMMAND);
     printBorder("CHANGE NAME");
@@ -173,16 +179,18 @@ void changeName(std::string& name) {
     std::cout << "Your name is currently " << name << ". Are you sure you want to change your name? (y/n): ";
     char confirm;
     std::cin >> confirm;
-    std::cin.ignore(); // ignore newline character
+    inputError("Invalid input. Please enter 'y' or 'n'.");
 
     if (confirm == 'y' || confirm == 'Y') {
         name = getName();
         nameConfirmation(name);
         std::cout << "Name updated successfully to " << name << "!" << std::endl;
         pauseForReturn();
-    } else {
+    } else if (confirm == 'n' || confirm == 'N') {
         std::cout << "Name change cancelled." << std::endl;
         pauseForReturn();
+    } else {
+        std::cout << "Invalid input. Please enter 'y' or 'n'." << std::endl;
     }
 }
 
@@ -213,7 +221,7 @@ void deleteProfile(std::string& name, std::string& password) {
     char confirm;
     std::cout << "Are you sure you want to delete your profile? (y/n): ";
     std::cin >> confirm;
-    std::cin.ignore(std::numeric_limits<std::streamsize>::max(), '\n');
+    inputError("Invalid input. Please enter 'y' or 'n'.");
 
     if (confirm == 'y' || confirm == 'Y') {
         name.clear();
@@ -226,14 +234,14 @@ void deleteProfile(std::string& name, std::string& password) {
     pauseForReturn();
 }
 
-// Main function to handle profile settings menu
+// Main function to handle profile settings menu.
 void profileSettings(std::string& name, std::string& password) {
     int choice;
     do {
-        printProfile(); // Display profile settings menu
+        printProfileSettingsMenu(); // Display profile settings menu.
         std::cout << ">>>>> Please select an option: ";
         std::cin >> choice;
-        std::cin.ignore(std::numeric_limits<std::streamsize>::max(), '\n');
+        inputError("Invalid input. Please enter a number between 1 and 5.");
 
         switch (choice) {
             case 1:
@@ -251,13 +259,10 @@ void profileSettings(std::string& name, std::string& password) {
                 deleteProfile(name, password);
                 break;
             case 5:
-                std::cout << "Returning to the main menu..." << std::endl;
+                std::cout << "Returning to the Main Menu..." << std::endl;
                 dateTime();
                 system(CLEAR_COMMAND); // Clear the screen after profile creation
-                dateTime();
-                printLogo();
-                std::cout << std::endl;
-                printMenu();
+                printMenu(name); // Display Main Menu after prompting user to exit.
                 break;
             default:
                 std::cout << "Invalid choice. Please try again." << std::endl;

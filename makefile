@@ -4,7 +4,7 @@ main: welcome.o main.o profile.o menu.o formatting.o errors.o files.o calculator
 welcome.o: welcome.cpp welcome.h formatting.h
 	g++ -c -std=c++17 welcome.cpp
 
-profile.o: profile.cpp profile.h formatting.h welcome.h menu.h
+profile.o: profile.cpp profile.h formatting.h welcome.h menu.h errors.h
 	g++ -c -std=c++17 profile.cpp
 
 main.o: main.cpp welcome.h profile.h menu.h

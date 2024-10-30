@@ -5,8 +5,8 @@
 std::string getName();
 void nameConfirmation();
 std::string getPassword();
-void printProfile();
-void runProgram();
+void printProfileSettingsMenu();
+std::string runProgram();
 void viewProfile();
 void createProfile();
 void changeName();

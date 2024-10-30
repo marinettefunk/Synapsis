@@ -5,18 +5,9 @@
 
 using namespace std;
 
-
-	
-
-
 int main() {
-    
-   message();
-
-   runProgram();
-
-   printMenu();
-
-
+    message();
+    std::string name = runProgram();
+    printMenu(name);
     return 0;
 }
