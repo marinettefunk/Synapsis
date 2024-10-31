@@ -7,6 +7,7 @@
 #include "profile.h"
 #include "files.h"
 #include "welcome.h"
+#include "chat.h"
 
 int choice() {
     int choice;
@@ -32,7 +33,7 @@ void printMenu (const std::string& name) {
     printBorder("MENU");
     std::cout << "1. Profile Settings" << std::endl;
     std::cout << "2. File Organiser App" << std::endl;
-    std::cout << "3. Chat" << std::endl;
+    std::cout << "3. ChatBot" << std::endl;
     std::cout << "4. Exit" << std::endl;
     std::cout << std::endl;
 
@@ -49,7 +50,7 @@ void printMenu (const std::string& name) {
             fileOrganiserApp();
             break;
         case 3:
-            // Add chat
+            ChatBot ();
             break;
         case 4:
             std::cout << "Thank you for using SYNAPSIS! Exiting program..." << std::endl;

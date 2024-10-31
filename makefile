@@ -10,7 +10,7 @@ profile.o: profile.cpp profile.h formatting.h welcome.h menu.h errors.h
 main.o: main.cpp welcome.h profile.h menu.h
 	g++ -c -std=c++17 main.cpp
 
-menu.o: menu.cpp menu.h errors.h profile.h files.h
+menu.o: menu.cpp menu.h errors.h profile.h files.h chat.h
 	g++ -c -std=c++17 menu.cpp
 
 errors.o: errors.cpp errors.h
