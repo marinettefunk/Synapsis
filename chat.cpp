@@ -12,10 +12,49 @@
 #ifdef _WIN32
 #define CLEAR_COMMAND "cls"
 #define OPEN_COMMAND "start "
+#elif __APPLE__
+#define CLEAR_COMMAND "clear"
+#define OPEN_COMMAND "open "  // For macOS
 #else
 #define CLEAR_COMMAND "clear"
-#define OPEN_COMMAND "xdg-open "  // Linux and possibly other UNIX systems
+#define OPEN_COMMAND "powershell.exe /c start "  // For WSL on Windows
 #endif
+
+// Function to URL encode the search query
+std::string urlEncode(const std::string& query) {
+    std::string encoded;
+    for (char c : query) {
+        if (isalnum(c) || c == '-' || c == '_' || c == '.' || c == '~') {
+            encoded += c;
+        } else if (c == ' ') {
+            encoded += "+";
+        } else {
+            char hex[4];
+            snprintf(hex, sizeof(hex), "%%%02X", static_cast<unsigned char>(c));
+            encoded += hex;
+        }
+    }
+    return encoded;
+}
+
+// Function to perform a Google search
+void googleSearch(const std::string& query) {
+    std::string encodedQuery = urlEncode(query);
+    std::string url = "https://www.google.com/search?q=" + encodedQuery;
+
+    // Determine the command based on the operating system
+    std::string command;
+
+    #ifdef _WIN32
+        command = "start " + url;
+    #elif __APPLE__
+        command = "open " + url;
+    #else // Linux and other UNIX-like OS
+        command = OPEN_COMMAND + url;  // Use PowerShell command for WSL
+    #endif
+
+    system(command.c_str());
+}
 
 // Function to detect keywords and respond accordingly
 std::string handleUserInput(const std::string& userInput) {
@@ -54,7 +93,6 @@ std::string handleUserInput(const std::string& userInput) {
         return "I am SYNAPSIS, your digital assistant here to help you! I am designed to assist with tasks like file management, "
                "opening apps, and more. Just type your queries, and I'll do my best to assist you!";
     }
-   
     // Detect date
     else if (input.find("date") != std::string::npos || 
              input.find("time") != std::string::npos || 
@@ -79,7 +117,6 @@ std::string handleUserInput(const std::string& userInput) {
              input.find("spreadsheet") != std::string::npos ||
              input.find("database") != std::string::npos ||   
              input.find("directory") != std::string::npos) {
-        // Add diagnostics to confirm this path was entered
         fileOrganiserApp();        
         return "Opening the File Organizer App...";
     } 
@@ -88,6 +125,15 @@ std::string handleUserInput(const std::string& userInput) {
              input.find("menu") != std::string::npos) {
         return "Navigating to Main Menu...";
     } 
+    // Detect Google search request
+    else if (input.find("google") != std::string::npos ||
+             input.find("search") != std::string::npos) {
+        std::cout << "What would you like to search for? ";
+        std::string searchQuery;
+        std::getline(std::cin, searchQuery);
+        googleSearch(searchQuery);
+        return "Searching Google for \"" + searchQuery + "\"...";
+    }
 
     // Default response for unrecognized inputs
     return "I'm here to help! Feel free to ask me anything.";
