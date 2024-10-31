@@ -43,31 +43,52 @@ void displayCurrentDirectory(const fs::path& currentPath) {
     std::cout << "Current Directory: " << currentPath << "\n" << std::endl;
 }
 
-// Function to get the file type based on the extension
+// Function to get the file type.
 std::string getFileType(const fs::path& path) {
-    if (path.extension() == ".txt") return "[TEXT FILE]";
-    else if (path.extension() == ".csv") return "[CSV FILE]";
-    else if (path.extension() == ".xml") return "[XML FILE]";
-    else if (path.extension() == ".json") return "[JSON FILE]";
-    else if (path.extension() == ".html") return "[HTML FILE]";
-    else if (path.extension() == ".css") return "[CSS FILE]";
-    else if (path.extension() == ".js") return "[JAVASCRIPT FILE]";
-    else if (path.extension() == ".png") return "[PNG IMAGE]";
-    else if (path.extension() == ".jpg" || path.extension() == ".jpeg") return "[JPEG IMAGE]";
-    else if (path.extension() == ".gif") return "[GIF IMAGE]";
-    else if (path.extension() == ".pdf") return "[PDF FILE]";
-    else if (path.extension() == ".doc") return "[WORD DOCUMENT]";
-    else if (path.extension() == ".docx") return "[WORD DOCUMENT (XML)]";
-    else if (path.extension() == ".xls") return "[EXCEL SPREADSHEET]";
-    else if (path.extension() == ".xlsx") return "[EXCEL SPREADSHEET (XML)]";
-    else if (path.extension() == ".ppt") return "[POWERPOINT PRESENTATION]";
-    else if (path.extension() == ".pptx") return "[POWERPOINT PRESENTATION (XML)]";
-    else if (path.extension() == ".accdb") return "[ACCESS DATABASE]";
-    else if (path.extension() == ".mdb") return "[ACCESS DATABASE (LEGACY)]";
-    else if (path.extension() == ".zip") return "[ZIP ARCHIVE]";
-    else if (path.extension() == ".exe") return "[EXECUTABLE FILE]";
+    std::string fileType;
+    if (path.extension() == ".txt") fileType = "[TEXT FILE]";
+    else if (path.extension() == ".csv") fileType = "[CSV FILE]";
+    else if (path.extension() == ".xml") fileType = "[XML FILE]";
+    else if (path.extension() == ".json") fileType = "[JSON FILE]";
+    else if (path.extension() == ".html") fileType = "[HTML FILE]";
+    else if (path.extension() == ".css") fileType = "[CSS FILE]";
+    else if (path.extension() == ".js") fileType = "[JAVASCRIPT FILE]";
+    else if (path.extension() == ".png") fileType = "[PNG IMAGE]";
+    else if (path.extension() == ".jpg" || path.extension() == ".jpeg") fileType = "[JPEG IMAGE]";
+    else if (path.extension() == ".gif") fileType = "[GIF IMAGE]";
+    else if (path.extension() == ".pdf") fileType = "[PDF FILE]";
+    else if (path.extension() == ".doc") fileType = "[WORD DOC]";
+    else if (path.extension() == ".docx") fileType = "[WORD DOCX]";
+    else if (path.extension() == ".xls") fileType = "[EXCEL XLS]";
+    else if (path.extension() == ".xlsx") fileType = "[EXCEL XLSX]";
+    else if (path.extension() == ".ppt") fileType = "[POWERPOINT]";
+    else if (path.extension() == ".pptx") fileType = "[POWERPOINTX]";
+    else if (path.extension() == ".accdb") fileType = "[ACCESS DB]";
+    else if (path.extension() == ".mdb") fileType = "[ACCESS MDB]";
+    else if (path.extension() == ".zip") fileType = "[ZIP ARCHIVE]";
+    else if (path.extension() == ".exe") fileType = "[EXECUTABLE]";
+    else if (path.extension() == ".cpp") fileType = "[C++ FILE]";
+    else if (path.extension() == ".h") fileType = "[C++ HEADER]";
+    else if (path.extension() == ".hpp") fileType = "[C++ HEADER]";
+    else if (path.extension() == ".c") fileType = "[C FILE]";
+    else if (path.extension() == ".h") fileType = "[C HEADER]";
+    else if (path.extension() == ".java") fileType = "[JAVA FILE]";
+    else if (path.extension() == ".py") fileType = "[PYTHON FILE]";
+    else if (path.extension() == ".php") fileType = "[PHP FILE]";
+    else if (path.extension() == ".rb") fileType = "[RUBY FILE]";
+    else if (path.extension() == ".swift") fileType = "[SWIFT FILE]";
+    else if (path.extension() == ".go") fileType = "[GO FILE]";
+    else if (path.extension() == ".kt") fileType = "[KOTLIN FILE]";
+    else if (path.extension() == ".scala") fileType = "[SCALA FILE]";
     // Add more conditions for other extensions as needed
-    return "[OTHER FILE]";
+    else fileType = "[OTHER FILE]";
+
+    // Truncate the string to a maximum length of 15 characters
+    if (fileType.length() > 15) {
+        fileType = fileType.substr(0, 12) + "...";
+    }
+
+    return fileType;
 }
 
 // Function to list current directory contents
@@ -84,7 +105,7 @@ void listCurrentDirectory(const fs::path& currentPath) {
         // Iterate over entries in the current directory
         for (const auto& entry : fs::directory_iterator(currentPath)) {
             // Determine if it's a file or directory
-            std::string type = entry.is_directory() ? "[DIR]" : getFileType(entry.path());
+            std::string type = entry.is_directory() ? "[DIR]" : getFileType(entry.path()).substr(0, 15);
             std::string name = entry.path().filename().string();
             std::string size = entry.is_regular_file() ? formatFileSize(entry.file_size()) : "-";
 
@@ -100,20 +121,37 @@ void listCurrentDirectory(const fs::path& currentPath) {
     }
 }
 
-// Navigate to a new directory
+// Function for directory navigation.
 fs::path navigateToDirectory(const fs::path& currentPath) {
     std::string input;
-    std::cout << "Enter the directory name to navigate (or '..' to go up): ";
+    std::cout << "Enter the directory name to navigate (or '..' to go up, or '.' to go down): ";
     std::getline(std::cin, input);
 
     if (input == "..") {
         return currentPath.parent_path(); // Go up to the parent directory
+    } else if (input == ".") {
+        // List subdirectories and let the user choose one to go down
+        std::cout << "Subdirectories:" << std::endl;
+        for (const auto& entry : fs::directory_iterator(currentPath)) {
+            if (entry.is_directory()) {
+                std::cout << entry.path().filename().string() << std::endl;
+            }
+        }
+        std::cout << ">>>>> Enter the subdirectory name to go down: ";
+        std::getline(std::cin, input);
+        fs::path newPath = currentPath / input;
+        if (fs::exists(newPath) && fs::is_directory(newPath)) {
+            return newPath; // Return the new path if it exists and is a directory
+        } else {
+            std::cerr << "Error: Directory not found. Please note that spelling and case must be exact." << std::endl;
+            return currentPath; // Stay in the current directory
+        }
     } else {
         fs::path newPath = currentPath / input;
         if (fs::exists(newPath) && fs::is_directory(newPath)) {
             return newPath; // Return the new path if it exists and is a directory
         } else {
-            std::cerr << "Directory not found." << std::endl;
+            std::cerr << "Error: Directory not found. Please note that spelling and case must be exact." << std::endl;
             return currentPath; // Stay in the current directory
         }
     }
@@ -123,6 +161,10 @@ fs::path navigateToDirectory(const fs::path& currentPath) {
 void renameFile(const fs::path& currentPath) {
     system(CLEAR_COMMAND);
     printBorder("RENAME FILE");
+    displayCurrentDirectory(currentPath);
+    listCurrentDirectory(currentPath);
+    std::cout << std::endl;
+
     std::string oldName, newName;
     std::cout << ">>>>> Enter the current file name: ";
     std::getline(std::cin, oldName);
@@ -141,6 +183,10 @@ void renameFile(const fs::path& currentPath) {
 void deleteFile(const fs::path& currentPath) {
     system(CLEAR_COMMAND);
     printBorder("DELETE FILE");
+    displayCurrentDirectory(currentPath);
+    listCurrentDirectory(currentPath);
+    std::cout << std::endl;
+
     std::string fileName;
     std::cout << ">>>>> Enter the file name to delete: ";
     std::getline(std::cin, fileName);
@@ -160,6 +206,10 @@ void deleteFile(const fs::path& currentPath) {
 void copyFileOrDir(const fs::path& currentPath) {
     system(CLEAR_COMMAND);
     printBorder("COPY FILE");
+    displayCurrentDirectory(currentPath);
+    listCurrentDirectory(currentPath);
+    std::cout << std::endl;
+
     std::string source, destination;
     std::cout << ">>>>> Enter the source path (file or directory): ";
     std::getline(std::cin, source);
@@ -178,6 +228,10 @@ void copyFileOrDir(const fs::path& currentPath) {
 void moveFile(const fs::path& currentPath) {
     system(CLEAR_COMMAND);
     printBorder("MOVE FILE");
+    displayCurrentDirectory(currentPath);
+    listCurrentDirectory(currentPath);
+    std::cout << std::endl;
+
     std::string source, destination;
     std::cout << ">>>>> Enter the source file name: ";
     std::getline(std::cin, source);
@@ -196,6 +250,9 @@ void moveFile(const fs::path& currentPath) {
 void reorderFiles(const fs::path& currentPath) {
     system(CLEAR_COMMAND);
     printBorder("REORDER FILES");
+    displayCurrentDirectory(currentPath);
+    listCurrentDirectory(currentPath);
+    std::cout << std::endl;
     try {
         std::vector<fs::path> files;
         for (const auto& entry : fs::directory_iterator(currentPath)) {
