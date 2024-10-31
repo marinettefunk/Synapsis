@@ -41,19 +41,28 @@ std::string urlEncode(const std::string& query) {
 void googleSearch(const std::string& query) {
     std::string encodedQuery = urlEncode(query);
     std::string url = "https://www.google.com/search?q=" + encodedQuery;
+    system((OPEN_COMMAND + url).c_str());
+}
 
-    // Determine the command based on the operating system
-    std::string command;
+// Function to perform a YouTube search
+void youtubeSearch(const std::string& query) {
+    std::string encodedQuery = urlEncode(query);
+    std::string url = "https://www.youtube.com/results?search_query=" + encodedQuery;
+    system((OPEN_COMMAND + url).c_str());
+}
 
-    #ifdef _WIN32
-        command = "start " + url;
-    #elif __APPLE__
-        command = "open " + url;
-    #else // Linux and other UNIX-like OS
-        command = OPEN_COMMAND + url;  // Use PowerShell command for WSL
-    #endif
+// Function to perform a Spotify search
+void spotifySearch(const std::string& query) {
+    std::string encodedQuery = urlEncode(query);
+    std::string url = "https://open.spotify.com/search/" + encodedQuery;
+    system((OPEN_COMMAND + url).c_str());
+}
 
-    system(command.c_str());
+// Function to perform a Wikipedia search
+void wikipediaSearch(const std::string& query) {
+    std::string encodedQuery = urlEncode(query);
+    std::string url = "https://en.wikipedia.org/wiki/Special:Search?search=" + encodedQuery;
+    system((OPEN_COMMAND + url).c_str());
 }
 
 // Function to detect keywords and respond accordingly
@@ -106,9 +115,9 @@ std::string handleUserInput(const std::string& userInput) {
     else if (input.find("name") != std::string::npos || 
              input.find("password") != std::string::npos || 
              input.find("profile") != std::string::npos) {
-            std::string name, password;
-            loadUserData(name, password);
-            profileSettings(name, password);
+        std::string name, password;
+        loadUserData(name, password);
+        profileSettings(name, password);
         return "Opening the Profile Settings Menu...";
     }
     else if (input.find("file") != std::string::npos || 
@@ -134,6 +143,30 @@ std::string handleUserInput(const std::string& userInput) {
         googleSearch(searchQuery);
         return "Searching Google for \"" + searchQuery + "\"...";
     }
+    // Detect YouTube search request
+    else if (input.find("youtube") != std::string::npos) {
+        std::cout << "What would you like to search for on YouTube? ";
+        std::string searchQuery;
+        std::getline(std::cin, searchQuery);
+        youtubeSearch(searchQuery);
+        return "Searching YouTube for \"" + searchQuery + "\"...";
+    }
+    // Detect Spotify search request
+    else if (input.find("spotify") != std::string::npos) {
+        std::cout << "What would you like to search for on Spotify? ";
+        std::string searchQuery;
+        std::getline(std::cin, searchQuery);
+        spotifySearch(searchQuery);
+        return "Searching Spotify for \"" + searchQuery + "\"...";
+    }
+    // Detect Wikipedia search request
+    else if (input.find("wikipedia") != std::string::npos) {
+        std::cout << "What would you like to search for on Wikipedia? ";
+        std::string searchQuery;
+        std::getline(std::cin, searchQuery);
+        wikipediaSearch(searchQuery);
+        return "Searching Wikipedia for \"" + searchQuery + "\"...";
+    }
 
     // Default response for unrecognized inputs
     return "I'm here to help! Feel free to ask me anything.";
@@ -157,8 +190,8 @@ void ChatBot() {
 
         // Get and display the response
         std::string response = handleUserInput(userInput);
-        if (!response.empty()) {  // Avoid printing if the response is an empty string (like after "Goodbye")
-            std::cout << "SYNAPSIS: " << response << std::endl; // Print without fadeIn for simplicity
+        if (!response.empty()) {  // Avoid printing if the response is empty
+            std::cout << response << std::endl;
         }
     }
 }
