@@ -104,7 +104,7 @@ std::string handleUserInput(const std::string& userInput) {
     if (input.find("hello") != std::string::npos || 
         input.find("hi") != std::string::npos || 
         input.find("hey") != std::string::npos) {
-        return "Hello! How can I assist you today?";
+        return "SYNAPSIS: Hello! How can I assist you today?\n";
     } 
     // Detect "how are you" inquiry
     else if (input.find("how are you") != std::string::npos ||
@@ -112,7 +112,7 @@ std::string handleUserInput(const std::string& userInput) {
              input.find("hello how are you") != std::string::npos ||
              input.find("hey how are you") != std::string::npos ||
              input.find("how do you feel") != std::string::npos) {
-        return "I'm just a virtual assistant, but thanks for asking! I'm here and ready to help you, how can I assist?";
+        return "SYNAPSIS: I'm just a virtual assistant, but thanks for asking! I'm here and ready to help you, how can I assist?\n";
     }
     // Detect farewell
     else if (input.find("bye") != std::string::npos || 
@@ -129,8 +129,8 @@ std::string handleUserInput(const std::string& userInput) {
              input.find("tell me about yourself") != std::string::npos ||
              input.find("yourself") != std::string::npos || 
              input.find("your name") != std::string::npos) {
-        return "I am SYNAPSIS, your digital assistant here to help you! I am designed to assist with tasks like file management, "
-               "opening apps, and more. Just type your queries, and I'll do my best to assist you!";
+        return "SYNAPSIS: I am SYNAPSIS, your digital assistant here to help you! I am designed to assist with tasks like file management, "
+               "opening apps, and more. Just type your queries, and I'll do my best to assist you!\n";
     }
     // Detect date
     else if (input.find("date") != std::string::npos || 
@@ -140,7 +140,7 @@ std::string handleUserInput(const std::string& userInput) {
         std::time_t currentTime = std::chrono::system_clock::to_time_t(now);
         std::string dateResponse = std::ctime(&currentTime);
         dateResponse.erase(dateResponse.size() - 1); // Remove the newline character
-        return "SYNAPSIS: " + dateResponse;
+        return "SYNAPSIS: " + dateResponse + "\n";
     }
     else if (input.find("name") != std::string::npos || 
              input.find("password") != std::string::npos || 
@@ -148,7 +148,7 @@ std::string handleUserInput(const std::string& userInput) {
         std::string name, password;
         loadUserData(name, password);
         profileSettings(name, password);
-        return "Opening the Profile Settings Menu...";
+        return "SYNAPSIS: Opening the Profile Settings Menu...\n";
     }
     else if (input.find("file") != std::string::npos || 
              input.find("folder") != std::string::npos || 
@@ -157,66 +157,66 @@ std::string handleUserInput(const std::string& userInput) {
              input.find("database") != std::string::npos ||   
              input.find("directory") != std::string::npos) {
         fileOrganiserApp();        
-        return "Opening the File Organizer App...";
+        return "SYNAPSIS: Opening the File Organizer App...\n";
     } 
     else if (input.find("main") != std::string::npos || 
              input.find("home") != std::string::npos ||  
              input.find("menu") != std::string::npos) {
-        return "Navigating to Main Menu...";
+        return "SYNAPSIS: Navigating to Main Menu...\n";
     } 
     // Detect Google search request
     else if (input.find("google") != std::string::npos ||
              input.find("search") != std::string::npos) {
-        std::cout << "What would you like to search for? ";
+        std::cout << "SYNAPSIS: What would you like to search for? ";
         std::string searchQuery;
         std::getline(std::cin, searchQuery);
         googleSearch(searchQuery);
-        return "Searching Google for \"" + searchQuery + "\"...";
+        return "SYNAPSIS: Searching Google for \"" + searchQuery + "\"...\n";
     }
     // Detect YouTube search request
     else if (input.find("youtube") != std::string::npos) {
-        std::cout << "What would you like to search for on YouTube? ";
+        std::cout << "SYNAPSIS: What would you like to search for on YouTube? ";
         std::string searchQuery;
         std::getline(std::cin, searchQuery);
         youtubeSearch(searchQuery);
-        return "Searching YouTube for \"" + searchQuery + "\"...";
+        return "SYNAPSIS: Searching YouTube for \"" + searchQuery + "\"...\n";
     }
     // Detect Spotify search request
     else if (input.find("spotify") != std::string::npos) {
-        std::cout << "What would you like to search for on Spotify? ";
+        std::cout << "SYNAPSIS: What would you like to search for on Spotify? ";
         std::string searchQuery;
         std::getline(std::cin, searchQuery);
         spotifySearch(searchQuery);
-        return "Searching Spotify for \"" + searchQuery + "\"...";
+        return "SYNAPSIS: Searching Spotify for \"" + searchQuery + "\"...\n";
     }
     // Detect Wikipedia search request
     else if (input.find("wikipedia") != std::string::npos) {
-        std::cout << "What would you like to search for on Wikipedia? ";
+        std::cout << "SYNAPSIS: What would you like to search for on Wikipedia? ";
         std::string searchQuery;
         std::getline(std::cin, searchQuery);
         wikipediaSearch(searchQuery);
-        return "Searching Wikipedia for \"" + searchQuery + "\"...";
+        return "SYNAPSIS: Searching Wikipedia for \"" + searchQuery + "\"...\n";
     }
     // Detect social media requests
     else if (input.find("whatsapp") != std::string::npos) {
         openWhatsApp();
-        return "Opening WhatsApp...";
+        return "SYNAPSIS: Opening WhatsApp...\n";
     }
     else if (input.find("instagram") != std::string::npos) {
         openInstagram();
-        return "Opening Instagram...";
+        return "SYNAPSIS: Opening Instagram...\n";
     }
     else if (input.find("twitter") != std::string::npos) {
         openTwitter();
-        return "Opening Twitter...";
+        return "SYNAPSIS: Opening Twitter...\n";
     }
     else if (input.find("facebook") != std::string::npos) {
         openFacebook();
-        return "Opening Facebook...";
+        return "SYNAPSIS: Opening Facebook...\n";
     }
     else if (input.find("linkedin") != std::string::npos) {
         openLinkedIn();
-        return "Opening LinkedIn...";
+        return "SYNAPSIS: Opening LinkedIn...\n";
     }
 
     // Default response for unrecognized inputs
