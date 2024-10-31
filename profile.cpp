@@ -1,7 +1,7 @@
 #include <iostream>
 #include <string>
 #include <fstream>
-#include <limits> // Required for numeric_limits
+#include <limits>
 #include "formatting.h"
 #include "welcome.h"
 #include "menu.h"
@@ -60,7 +60,7 @@ void nameConfirmation(std::string& name) {
         } else if (confirm == 'n' || confirm == 'N') {
             name = getName();
         } else {
-            inputError("Invalid input. Please enter 'y' or 'n'.");
+           std::cout << "Invalid input. Please enter 'y' or 'n'." << std::endl;
         }
     }
 }
@@ -78,7 +78,9 @@ std::string getPassword() {
         if (confirmPassword == password) {
             break;
         } else {
-            inputError("Passwords do not match. Please try again.");
+            std::cout << "Passwords do not match. Please try again." << std::endl;
+            std::cout << ">>>>> Re-enter your password: ";
+            std::getline(std::cin, confirmPassword);
         }
     }
 
@@ -122,7 +124,7 @@ std::string runProgram() {
             if (inputPassword == password) {
                 loginSuccessful = true;
             } else {
-                inputError("Incorrect password. Please try again.");
+                std::cout << "Incorrect password. Please try again." << std::endl;
             }
         }
 
@@ -168,34 +170,38 @@ void viewProfile(const std::string& name, const std::string& password) {
     pauseForReturn();
 }
 
-// Function to change the user's name.
-void changeName(std::string& name) {
+// Function to change the name of the user.
+void changeName(std::string& name, std::string& password) {
     if (system(CLEAR_COMMAND) != 0) {
         inputError("Failed to clear the screen.");
     }
     printBorder("CHANGE NAME");
 
-    std::cout << "Your name is currently " << name << ". Are you sure you want to change your name? (y/n): ";
     char confirm;
-    std::cin >> confirm;
-    std::cin.ignore();
+    while (true) {
+        std::cout << "Your name is currently " << name << "." << std::endl;
+        std::cout << ">>>>> Are you sure you want to change your name? (y/n): ";
+        std::cin >> confirm;
+        std::cin.ignore();
 
-    if (confirm == 'y' || confirm == 'Y') {
-        std::cout << ">>>>> Please enter your new name: ";
-        std::getline(std::cin, name);
-        std::string password = getPassword();
-        saveUserData(name, password);
-        std::cout << "Name updated successfully to " << name << "!" << std::endl;
-    } else if (confirm == 'n' || confirm == 'N') {
-        std::cout << "Name change cancelled." << std::endl;
-    } else {
-        inputError("Invalid input. Please enter 'y' or 'n'.");
+        if (confirm == 'y' || confirm == 'Y') {
+            std::cout << ">>>>> Please enter your new name: ";
+            std::getline(std::cin, name);
+            saveUserData(name, password);
+            std::cout << "Name updated successfully to " << name << "!" << std::endl;
+            break;
+        } else if (confirm == 'n' || confirm == 'N') {
+            std::cout << "Name change cancelled." << std::endl;
+            break;
+        } else {
+            std::cout << "Invalid input. Please enter 'y' or 'n'." << std::endl;
+        }
     }
     pauseForReturn();
 }
 
 // Function to change the user's password.
-void changePassword(std::string& password) {
+void changePassword(std::string& password, std::string& name) {
     if (system(CLEAR_COMMAND) != 0) {
         inputError("Failed to clear the screen.");
     }
@@ -208,13 +214,13 @@ void changePassword(std::string& password) {
 
     if (confirm == 'y' || confirm == 'Y') {
         password = getPassword();
-        std::string name = getName();
         saveUserData(name, password);
         std::cout << "Password updated successfully!" << std::endl;
     } else if (confirm == 'n' || confirm == 'N') {
         std::cout << "Password change cancelled." << std::endl;
     } else {
-        inputError("Invalid input. Please enter 'y' or 'n'.");
+        std::cout << "Invalid input. Please enter 'y' or 'n'." << std::endl;
+        changePassword(password, name);
     }
     pauseForReturn();
 }
@@ -226,20 +232,25 @@ void deleteProfile(std::string& name, std::string& password) {
     }
     printBorder("DELETE PROFILE");
 
-    std::cout << "Are you sure you want to delete your profile? (y/n): ";
     char confirm;
-    std::cin >> confirm;
-    std::cin.ignore();
+    while (true) {
+        std::cout << "Are you sure you want to delete your profile? (y/n): ";
+        std::cin >> confirm;
+        std::cin.ignore();
 
-    if (confirm == 'y' || confirm == 'Y') {
-        name.clear();
-        password.clear();
-        saveUserData(name, password);
-        std::cout << "Profile deletion successful." << std::endl;
-    } else if (confirm == 'n' || confirm == 'N') {
-        std::cout << "Profile deletion cancelled." << std::endl;
-    } else {
-        inputError("Invalid input. Please enter 'y' or 'n'.");
+        if (confirm == 'y' || confirm == 'Y') {
+            name.clear();
+            password.clear();
+            saveUserData(name, password);
+            std::cout << "Profile deletion successful." << std::endl;
+            createProfile(name, password);
+            break;
+        } else if (confirm == 'n' || confirm == 'N') {
+            std::cout << "Profile deletion cancelled." << std::endl;
+            break;
+        } else {
+            std::cout << "Invalid input. Please enter 'y' or 'n'." << std::endl;
+        }
     }
     pauseForReturn();
 }
@@ -256,24 +267,27 @@ void profileSettings(std::string& name, std::string& password) {
             std::cin.ignore(std::numeric_limits<std::streamsize>::max(), '\n');
             continue;
         }
+        
+        std::cin.ignore(std::numeric_limits<std::streamsize>::max(), '\n');
 
         switch (choice) {
             case 1:
                 viewProfile(name, password);
                 break;
             case 2:
-                changeName(name);
+                changeName(name, password);
                 break;
             case 3:
-                changePassword(password);
+                changePassword(password, name);
                 break;
             case 4:
                 deleteProfile(name, password);
                 break;
             case 5:
-                std::cout << "Returning to the Main Menu..." << std::endl;
+                printMenu(name);
                 break;
+            default:
+                std::cout << "Invalid input. Please enter a number between 1 and 5." << std::endl;
         }
     } while (choice != 5);
 }
-
