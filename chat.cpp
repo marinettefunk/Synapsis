@@ -14,73 +14,8 @@
 #define OPEN_COMMAND "start "
 #else
 #define CLEAR_COMMAND "clear"
-#define OPEN_COMMAND "xdg-open "
+#define OPEN_COMMAND "xdg-open "  // Linux and possibly other UNIX systems
 #endif
-
-// Function to install necessary applications
-void installApplication(const std::string& appName) {
-#ifdef _WIN32
-    std::cout << "Installation is typically manual on Windows." << std::endl;
-    std::cout << "Please ensure " << appName << " is installed." << std::endl;
-#else
-    std::string command;
-
-    if (appName == "xdg-open") {
-        command = "sudo apt install xdg-utils";  // Installation command for xdg-utils
-    } else if (appName == "gnome-open") {
-        command = "sudo apt install gnome-utils";  // Installation command for gnome-utils
-    } else if (appName == "kde-open") {
-        command = "sudo apt install kde-open";  // Installation command for kde-open
-    } else {
-        std::cerr << "Unknown application: " << appName << std::endl;
-        return;
-    }
-
-    std::cout << "Attempting to install " << appName << " using command: " << command << std::endl;
-    int result = system(command.c_str());
-    if (result == 0) {
-        std::cout << appName << " has been successfully installed!" << std::endl;
-    } else {
-        std::cerr << "Failed to install " << appName << ". Please install it manually." << std::endl;
-    }
-#endif
-}
-
-// Function to open a URL or application
-void openAppOrWebsite(const std::string& appOrUrl) {
-    std::string command;
-
-#ifdef _WIN32
-    command = "start " + appOrUrl;  // For Windows
-#else
-    command = "xdg-open " + appOrUrl;  // Default for Linux
-    int result = system(command.c_str());
-    if (result != 0) {
-        std::cerr << "xdg-open failed. Attempting gnome-open..." << std::endl;
-        command = "gnome-open " + appOrUrl;
-        result = system(command.c_str());
-        if (result != 0) {
-            std::cerr << "gnome-open failed. Attempting kde-open..." << std::endl;
-            command = "kde-open " + appOrUrl;
-            result = system(command.c_str());
-            if (result != 0) {
-                std::cerr << "Error opening: " << appOrUrl << std::endl;
-                // Ask user if they want to install the missing applications
-                std::string installChoice;
-                std::cout << "Would you like to install the necessary application? (yes/no): ";
-                std::getline(std::cin, installChoice);
-                if (installChoice == "yes") {
-                    installApplication("xdg-open");
-                    installApplication("gnome-open");
-                    installApplication("kde-open");
-                }
-            }
-        }
-    }
-#endif
-
-    std::cout << "Command executed: " << command << std::endl; // Debugging line
-}
 
 // Function to detect keywords and respond accordingly
 std::string handleUserInput(const std::string& userInput) {
@@ -108,7 +43,7 @@ std::string handleUserInput(const std::string& userInput) {
              input.find("back") != std::string::npos || 
              input.find("exit") != std::string::npos) {
         std::string farewellMessage = "Goodbye! Have a great day!";
-        fadeIn(farewellMessage);
+        std::cout << "SYNAPSIS: " << farewellMessage << std::endl; // Directly print without fade effect
         exit(0);  // Exit the program after displaying the message
     }
     // Respond to questions about Synapsis
@@ -119,24 +54,7 @@ std::string handleUserInput(const std::string& userInput) {
         return "I am SYNAPSIS, your digital assistant here to help you! I am designed to assist with tasks like file management, "
                "opening apps, and more. Just type your queries, and I'll do my best to assist you!";
     }
-    // Detect commands to open websites
-    else if (input.find("open google") != std::string::npos) {
-        openAppOrWebsite("https://www.google.com");
-        return "Opening Google in your default browser...";
-    } 
-    else if (input.find("open youtube") != std::string::npos) {
-        openAppOrWebsite("https://www.youtube.com");
-        return "Opening YouTube in your default browser.";
-    } 
-    else if (input.find("open") != std::string::npos) {
-        // Check for general websites or applications
-        size_t pos = input.find("open ");
-        if (pos != std::string::npos) {
-            std::string site = input.substr(pos + 5);
-            openAppOrWebsite("https://" + site + ".com");
-            return "Opening " + site + " in your default browser.";
-        }
-    }
+   
     // Detect date
     else if (input.find("date") != std::string::npos || 
              input.find("time") != std::string::npos || 
@@ -145,12 +63,14 @@ std::string handleUserInput(const std::string& userInput) {
         std::time_t currentTime = std::chrono::system_clock::to_time_t(now);
         std::string dateResponse = std::ctime(&currentTime);
         dateResponse.erase(dateResponse.size() - 1); // Remove the newline character
-        std::string response = "SYNAPSIS: " + dateResponse;
-        return response;
+        return "SYNAPSIS: " + dateResponse;
     }
     else if (input.find("name") != std::string::npos || 
              input.find("password") != std::string::npos || 
              input.find("profile") != std::string::npos) {
+            std::string name, password;
+            loadUserData(name, password);
+            profileSettings(name, password);
         return "Opening the Profile Settings Menu...";
     }
     else if (input.find("file") != std::string::npos || 
@@ -159,7 +79,9 @@ std::string handleUserInput(const std::string& userInput) {
              input.find("spreadsheet") != std::string::npos ||
              input.find("database") != std::string::npos ||   
              input.find("directory") != std::string::npos) {
-        return "Opening the File Organiser App...";
+        // Add diagnostics to confirm this path was entered
+        fileOrganiserApp();        
+        return "Opening the File Organizer App...";
     } 
     else if (input.find("main") != std::string::npos || 
              input.find("home") != std::string::npos ||  
@@ -190,7 +112,7 @@ void ChatBot() {
         // Get and display the response
         std::string response = handleUserInput(userInput);
         if (!response.empty()) {  // Avoid printing if the response is an empty string (like after "Goodbye")
-            fadeIn("SYNAPSIS: " + response + "\n");  // Display using fadeIn for typing effect
+            std::cout << "SYNAPSIS: " << response << std::endl; // Print without fadeIn for simplicity
         }
     }
 }

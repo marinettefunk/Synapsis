@@ -522,8 +522,10 @@ void fileOrganiserApp() {
                 moveFileOrDir(currentPath);
                 break;
             case 5:
-                printMenu ("");
-                break;
+    std::string name, password;
+    loadUserData(name, password);
+    printMenu(name);
+    break;
         }
         system("pause"); // Wait for user input before continuing
     }
