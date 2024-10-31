@@ -14,6 +14,7 @@
 #include "formatting.h"
 #include "welcome.h"
 #include "menu.h"
+#include "profile.h"
 
 #ifdef _WIN32
 #define CLEAR_COMMAND "cls"

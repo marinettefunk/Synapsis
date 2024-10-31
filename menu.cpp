@@ -6,8 +6,6 @@
 #include "errors.h"
 #include "profile.h"
 #include "files.h"
-#include "notes.h"
-#include "calculator.h"
 #include "welcome.h"
 
 int choice() {
@@ -34,9 +32,8 @@ void printMenu (const std::string& name) {
     printBorder("MENU");
     std::cout << "1. Profile Settings" << std::endl;
     std::cout << "2. File Organiser App" << std::endl;
-    std::cout << "3. Calculator" << std::endl;
-    std::cout << "4. Notes App" << std::endl;
-    std::cout << "5. Exit" << std::endl;
+    std::cout << "3. Chat" << std::endl;
+    std::cout << "4. Exit" << std::endl;
     std::cout << std::endl;
 
     int selectedChoice = choice();
@@ -52,15 +49,12 @@ void printMenu (const std::string& name) {
             fileOrganiserApp();
             break;
         case 3:
-            calculator();
+            // Add chat
             break;
         case 4:
-            // Add functionality for notes here
-            break;
-        case 5:
             std::cout << "Thank you for using SYNAPSIS! Exiting program..." << std::endl;
             exit(0);
-            break;
+            break;           
         default:
             std::cout << "Invalid choice." << std::endl;
             break;
