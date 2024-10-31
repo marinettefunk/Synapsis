@@ -12,10 +12,18 @@
 #ifdef _WIN32
 #define CLEAR_COMMAND "cls"
 #define OPEN_COMMAND "start "
+#define ESPEAK_COMMAND "espeak.exe "  // Ensure espeak.exe is in the PATH
 #else
 #define CLEAR_COMMAND "clear"
 #define OPEN_COMMAND "xdg-open "
+#define ESPEAK_COMMAND "espeak "
 #endif
+
+// Function to call espeak for text-to-speech
+void speak(const std::string& text) {
+    std::string command = ESPEAK_COMMAND + std::string("\"") + text + "\"";
+    system(command.c_str());
+}
 
 // Function to open a URL or application
 void openAppOrWebsite(const std::string& appOrUrl) {
@@ -34,13 +42,13 @@ std::string handleUserInput(const std::string& userInput) {
         input.find("hey") != std::string::npos) {
         return "Hello! How can I assist you today?";
     } 
-     // Detect "how are you" inquiry
+    // Detect "how are you" inquiry
     else if (input.find("how are you") != std::string::npos ||
              input.find("hi how are you") != std::string::npos ||
              input.find("hello how are you") != std::string::npos ||
              input.find("hey how are you") != std::string::npos ||
              input.find("how do you feel") != std::string::npos) {
-        return "I'm just as virual assistant, but thanks for asking! I'm here and ready to help you, how can I assist?";
+        return "I'm just a virtual assistant, but thanks for asking! I'm here and ready to help you, how can I assist?";
     }
     // Detect farewell
     else if (input.find("bye") != std::string::npos || 
@@ -49,6 +57,7 @@ std::string handleUserInput(const std::string& userInput) {
              input.find("back") != std::string::npos || 
              input.find("exit") != std::string::npos) {
         fadeIn("Goodbye! Have a great day!");
+        speak("Goodbye! Have a great day!"); // Speak the farewell
         exit(0);
         return "";  // Indicate the farewell message is displayed
     }
@@ -93,16 +102,17 @@ std::string handleUserInput(const std::string& userInput) {
         auto now = std::chrono::system_clock::now();
         std::time_t currentTime = std::chrono::system_clock::to_time_t(now);
         fadeIn(std::string(std::ctime(&currentTime)));
+        speak(std::string(std::ctime(&currentTime))); // Speak the date/time
         return "";  // Indicate the farewell message is displayed
     }
 
     else if (input.find("name") != std::string::npos || 
     input.find("password") != std::string::npos || 
     input.find("profile") != std::string::npos) {
-    return "Opening the Profile Settings Menu";
-    std::string name, password;
-    loadUserData(name, password);
-    profileSettings(name, password); // Pass both name and password
+        return "Opening the Profile Settings Menu";
+        std::string name, password;
+        loadUserData(name, password);
+        profileSettings(name, password); // Pass both name and password
     }
 
     else if (input.find("file") != std::string::npos || 
@@ -132,6 +142,7 @@ void ChatBot() {
         // Exit if the user wants to leave
         if (userInput == "exit") {
             std::cout << "SYNAPSIS: Goodbye!\n";
+            speak("Goodbye!"); // Speak goodbye
             break;
         }
 
@@ -139,6 +150,7 @@ void ChatBot() {
         std::string response = handleUserInput(userInput);
         if (!response.empty()) {  // Avoid printing if the response is an empty string (like after "Goodbye")
             fadeIn("SYNAPSIS: " + response + "\n");  // Display using fadeIn for typing effect
+            speak(response);  // Speak the response
         }
     }
 }
