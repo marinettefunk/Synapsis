@@ -16,9 +16,9 @@
 #include "menu.h"
 
 #ifdef _WIN32
-#define CLEAR_COMMAND "cls" // Windows
+#define CLEAR_COMMAND "cls"
 #else
-#define CLEAR_COMMAND "clear" // Unix/Linux, macOS
+#define CLEAR_COMMAND "clear"
 #endif
 
 namespace fs = std::filesystem;
@@ -100,7 +100,7 @@ void listCurrentDirectory(const fs::path& currentPath) {
                   << std::setw(25) << "Name" 
                   << std::setw(15) << "Size" 
                   << std::endl;
-        std::cout << std::string(80, '-') << std::endl;
+        std::cout << std::string(70, '-') << std::endl;
 
         // Iterate over entries in the current directory
         for (const auto& entry : fs::directory_iterator(currentPath)) {
@@ -165,12 +165,45 @@ void renameFile(const fs::path& currentPath) {
     listCurrentDirectory(currentPath);
     std::cout << std::endl;
 
+    char confirm;
     std::string oldName, newName;
-    std::cout << ">>>>> Enter the current file name: ";
-    std::getline(std::cin, oldName);
-    std::cout << ">>>>> Enter the new file name: ";
-    std::getline(std::cin, newName);
+    while (true) {
+        std::cout << ">>>>> Enter the current file name: ";
+        std::getline(std::cin, oldName);
 
+        // Check if the file exists in the directory
+        if (!fs::exists(currentPath / oldName)) {
+            std::cout << "Error: File '" << oldName << "' not found in the directory. Please try again." << std::endl;
+            continue;
+        }
+
+        while (true) {
+            std::cout << ">>>>> Are you sure you want to change your name? (y/n): ";
+            std::cin >> confirm;
+            std::cin.ignore();
+
+            if (confirm == 'y' || confirm == 'Y') {
+                std::cout << ">>>>> Enter the new file name: ";
+                std::getline(std::cin, newName);
+
+                if (newName.empty()) {
+                    std::cout << "Error: New file name cannot be empty. Please try again." << std::endl;
+                } else {
+                    std::cout << "Name updated successfully to " << newName << "!" << std::endl;
+                    break;
+                }
+            } else if (confirm == 'n' || confirm == 'N') {
+                std::cout << "Name change cancelled." << std::endl;
+                break;
+            } else {
+                std::cout << "Invalid input. Please enter 'y' or 'n'." << std::endl;
+                std::cin.clear();
+                std::cin.ignore(std::numeric_limits<std::streamsize>::max(), '\n');
+            }
+        }
+        break;
+    }
+    pauseForReturn();
     try {
         fs::rename(currentPath / oldName, currentPath / newName);
         std::cout << "File renamed successfully." << std::endl;
@@ -188,18 +221,45 @@ void deleteFile(const fs::path& currentPath) {
     std::cout << std::endl;
 
     std::string fileName;
-    std::cout << ">>>>> Enter the file name to delete: ";
-    std::getline(std::cin, fileName);
+    while (true) {
+        std::cout << ">>>>> Enter the file name to delete: ";
+        std::getline(std::cin, fileName);
 
-    try {
-        if (fs::remove(currentPath / fileName)) {
-            std::cout << "File deleted successfully." << std::endl;
-        } else {
-            std::cerr << "File not found." << std::endl;
+        // Check if the file exists in the directory
+        if (!fs::exists(currentPath / fileName)) {
+            std::cout << "Error: File '" << fileName << "' not found in the directory. Please try again." << std::endl;
+            continue;
         }
-    } catch (const std::exception& e) {
-        std::cerr << "Error deleting file: " << e.what() << std::endl;
+
+        char confirm;
+        while (true) {
+            std::cout << ">>>>> Are you sure you want to delete the file? (y/n): ";
+            std::cin >> confirm;
+            std::cin.ignore();
+
+            if (confirm == 'y' || confirm == 'Y') {
+                try {
+                    if (fs::remove(currentPath / fileName)) {
+                        std::cout << "File deleted successfully." << std::endl;
+                    } else {
+                        std::cerr << "File not found." << std::endl;
+                    }
+                } catch (const std::exception& e) {
+                    std::cerr << "Error deleting file: " << e.what() << std::endl;
+                }
+                break;
+            } else if (confirm == 'n' || confirm == 'N') {
+                std::cout << "File deletion cancelled." << std::endl;
+                break;
+            } else {
+                std::cout << "Invalid input. Please enter 'y' or 'n'." << std::endl;
+                std::cin.clear();
+                std::cin.ignore(std::numeric_limits<std::streamsize>::max(), '\n');
+            }
+        }
+        break;
     }
+    pauseForReturn();
 }
 
 // Copy File or Directory
@@ -211,17 +271,51 @@ void copyFileOrDir(const fs::path& currentPath) {
     std::cout << std::endl;
 
     std::string source, destination;
-    std::cout << ">>>>> Enter the source path (file or directory): ";
-    std::getline(std::cin, source);
-    std::cout << ">>>>> Enter the destination path: ";
-    std::getline(std::cin, destination);
+    while (true) {
+        std::cout << ">>>>> Enter the source path (file or directory): ";
+        std::getline(std::cin, source);
 
-    try {
-        fs::copy(currentPath / source, destination, fs::copy_options::overwrite_existing | fs::copy_options::recursive);
-        std::cout << "Copied successfully." << std::endl;
-    } catch (const std::exception& e) {
-        std::cerr << "Error copying: " << e.what() << std::endl;
+        // Check if the source file or directory exists
+        if (!fs::exists(currentPath / source)) {
+            std::cout << "Error: Source '" << source << "' not found in the directory. Please try again." << std::endl;
+            continue;
+        }
+
+        std::cout << ">>>>> Enter the destination path: ";
+        std::getline(std::cin, destination);
+
+        // Check if the destination directory exists
+        if (!fs::exists(destination)) {
+            std::cout << "Error: Destination directory '" << destination << "' does not exist. Please try again." << std::endl;
+            continue;
+        }
+
+        char confirm;
+        while (true) {
+            std::cout << ">>>>> Are you sure you want to copy the file or directory? (y/n): ";
+            std::cin >> confirm;
+            std::cin.ignore();
+
+            if (confirm == 'y' || confirm == 'Y') {
+                try {
+                    fs::copy(currentPath / source, destination, fs::copy_options::overwrite_existing | fs::copy_options::recursive);
+                    std::cout << "Copied successfully." << std::endl;
+                } catch (const std::exception& e) {
+                    std::cerr << "Error copying: " << e.what() << std::endl;
+                }
+                break;
+            } else if (confirm == 'n' || confirm == 'N') {
+                std::cout << "Copy operation cancelled." << std::endl;
+                break;
+            } else {
+                std::cout << "Invalid input. Please enter 'y' or 'n'." << std::endl;
+                std::cin.clear();
+                std::cin.ignore(std::numeric_limits<std::streamsize>::max(), '\n');
+            }
+        }
+        break;
     }
+    pauseForReturn();
 }
 
 // Move File or Directory
@@ -233,43 +327,53 @@ void moveFile(const fs::path& currentPath) {
     std::cout << std::endl;
 
     std::string source, destination;
-    std::cout << ">>>>> Enter the source file name: ";
-    std::getline(std::cin, source);
-    std::cout << ">>>>> Enter the destination path: ";
-    std::getline(std::cin, destination);
+    while (true) {
+        std::cout << ">>>>> Enter the source file name: ";
+        std::getline(std::cin, source);
 
-    try {
-        fs::rename(currentPath / source, destination);
-        std::cout << "File moved successfully." << std::endl;
-    } catch (const std::exception& e) {
-        std::cerr << "Error moving file: " << e.what() << std::endl;
-    }
-}
+        // Check if the source file exists
+        if (!fs::exists(currentPath / source)) {
+            std::cout << "Error: Source file '" << source << "' not found in the directory. Please try again." << std::endl;
+            continue;
+        }
 
-// Re-order Files by Name
-void reorderFiles(const fs::path& currentPath) {
-    system(CLEAR_COMMAND);
-    printBorder("REORDER FILES");
-    displayCurrentDirectory(currentPath);
-    listCurrentDirectory(currentPath);
-    std::cout << std::endl;
-    try {
-        std::vector<fs::path> files;
-        for (const auto& entry : fs::directory_iterator(currentPath)) {
-            if (fs::is_regular_file(entry)) {
-                files.push_back(entry.path());
+        std::cout << ">>>>> Enter the destination path: ";
+        std::getline(std::cin, destination);
+
+        // Check if the destination directory exists
+        if (!fs::exists(destination)) {
+            std::cout << "Error: Destination directory '" << destination << "' does not exist. Please try again." << std::endl;
+            continue;
+        }
+
+        char confirm;
+        while (true) {
+            std::cout << ">>>>> Are you sure you want to move the file? (y/n): ";
+            std::cin >> confirm;
+            std::cin.ignore();
+
+            if (confirm == 'y' || confirm == 'Y') {
+                try {
+                    fs::rename(currentPath / source, destination);
+                    std::cout << "File moved successfully." << std::endl;
+                } catch (const std::exception& e) {
+                    std::cerr << "Error moving file: " << e.what() << std::endl;
+                }
+                break;
+            } else if (confirm == 'n' || confirm == 'N') {
+                std::cout << "File move operation cancelled." << std::endl;
+                break;
+            } else {
+                std::cout << "Invalid input. Please enter 'y' or 'n'." << std::endl;
+                std::cin.clear();
+                std::cin.ignore(std::numeric_limits<std::streamsize>::max(), '\n');
             }
         }
-        std::sort(files.begin(), files.end());
-
-        std::cout << "Files in sorted order:\n";
-        for (const auto& file : files) {
-            std::cout << file.filename() << std::endl;
-        }
-    } catch (const std::exception& e) {
-        std::cerr << "Error reading directory: " << e.what() << std::endl;
+        break;
     }
+    pauseForReturn();
 }
+
 
 // Display Menu and Get User Choice
 void printFileOrganiserMenu() {
@@ -278,8 +382,7 @@ void printFileOrganiserMenu() {
               << "2. Delete File\n"
               << "3. Copy File\n"
               << "4. Move File\n"
-              << "5. Reorder Files\n"
-              << "6. Back to main menu" << std::endl;
+              << "5. Back to main menu" << std::endl;
 }
 
 // Main File Organiser Application Function
@@ -338,9 +441,6 @@ void fileOrganiserApp() {
                 moveFile(currentPath);
                 break;
             case 5:
-                reorderFiles(currentPath);
-                break;
-            case 6:
                 std::cout << "Exiting the application." << std::endl;
                 return;
         }
