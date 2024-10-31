@@ -109,7 +109,7 @@ std::string handleUserInput(const std::string& userInput) {
     else if (input.find("name") != std::string::npos || 
     input.find("password") != std::string::npos || 
     input.find("profile") != std::string::npos) {
-        return "Opening the Profile Settings Menu";
+        return "Opening the Profile Settings Menu...";
         std::string name, password;
         loadUserData(name, password);
         profileSettings(name, password); // Pass both name and password
@@ -121,7 +121,13 @@ std::string handleUserInput(const std::string& userInput) {
         input.find("spreadheet") != std::string::npos ||
         input.find("database") != std::string::npos ||   
         input.find("directory") != std::string::npos) {
-        return "Opening the File Organiser App";
+        return "Opening the File Organiser App...";
+        fileOrganiserApp();
+    } 
+    else if (input.find("main") != std::string::npos || 
+        input.find("home") != std::string::npos ||  
+        input.find("menu") != std::string::npos) {
+        return "Navigating to Main Menu...";
         fileOrganiserApp();
     } 
 

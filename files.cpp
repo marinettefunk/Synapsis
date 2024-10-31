@@ -522,7 +522,7 @@ void fileOrganiserApp() {
                 moveFileOrDir(currentPath);
                 break;
             case 5:
-                //
+                printMenu ("");
                 break;
         }
         system("pause"); // Wait for user input before continuing
