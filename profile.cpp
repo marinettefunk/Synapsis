@@ -153,11 +153,6 @@ void printProfileSettingsMenu() {
     std::cout << std::endl;
 }
 
-// Utility function to pause and wait for user input before returning to the menu.
-void pauseForReturn() {
-    std::cout << "\n>>>>> Press Enter to return to the menu <<<<<<";
-    std::cin.ignore(std::numeric_limits<std::streamsize>::max(), '\n');
-}
 
 // Function to display the user's profile.
 void viewProfile(const std::string& name, const std::string& password) {

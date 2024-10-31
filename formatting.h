@@ -9,5 +9,6 @@ std::string getCenteredText(const std::string& text);
 void fadeIn(const std::string& text);
 void printBorder(const std::string& message);
 void dateTime();
+void pauseForReturn();
 
 #endif // FORMATTING_H
