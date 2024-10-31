@@ -1,5 +1,5 @@
 main: welcome.o main.o profile.o menu.o formatting.o errors.o files.o chat.o
-	g++ -std=c++17 welcome.o main.o profile.o menu.o formatting.o errors.o files.o -o main
+	g++ -std=c++17 welcome.o main.o profile.o menu.o formatting.o errors.o files.o chat.o -o main
 
 welcome.o: welcome.cpp welcome.h formatting.h
 	g++ -c -std=c++17 welcome.cpp
@@ -22,7 +22,7 @@ formatting.o: formatting.cpp formatting.h welcome.h menu.h
 files.o: files.cpp files.h profile.h formatting.h welcome.h menu.h
 	g++ -c -std=c++17 files.cpp
 
-chat.o: chat.cpp chat.h
+chat.o: chat.cpp chat.h files.h profile.h formatting.h welcome.h menu.h
 	g++ -c -std=c++17 chat.cpp
 
 clean:

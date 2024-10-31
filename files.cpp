@@ -241,7 +241,7 @@ void deleteFile(const fs::path& currentPath) {
             if (confirm == 'y' || confirm == 'Y') {
                 try {
                     if (fs::remove(currentPath / fileName)) {
-                        std::cout << "File deleted successfully." << std::endl;
+                        std::cout << "File deleted successfully!" << std::endl;
                     } else {
                         std::cerr << "File not found." << std::endl;
                     }
@@ -481,6 +481,7 @@ void fileOrganiserApp() {
         std::cout << std::endl;
 
         // Add option to navigate directories
+        std::cout << "First, navigate or stay in desired directory:" << std::endl;
         std::cout << ">>>>> Enter 'navigate' to change directory, or choose an option: ";
         
         std::string userInput;
