@@ -65,6 +65,36 @@ void wikipediaSearch(const std::string& query) {
     system((OPEN_COMMAND + url).c_str());
 }
 
+// Function to open WhatsApp
+void openWhatsApp() {
+    std::string url = "https://web.whatsapp.com";
+    system((OPEN_COMMAND + url).c_str());
+}
+
+// Function to open Instagram
+void openInstagram() {
+    std::string url = "https://www.instagram.com";
+    system((OPEN_COMMAND + url).c_str());
+}
+
+// Function to open Twitter
+void openTwitter() {
+    std::string url = "https://twitter.com";
+    system((OPEN_COMMAND + url).c_str());
+}
+
+// Function to open Facebook
+void openFacebook() {
+    std::string url = "https://www.facebook.com";
+    system((OPEN_COMMAND + url).c_str());
+}
+
+// Function to open LinkedIn
+void openLinkedIn() {
+    std::string url = "https://www.linkedin.com";
+    system((OPEN_COMMAND + url).c_str());
+}
+
 // Function to detect keywords and respond accordingly
 std::string handleUserInput(const std::string& userInput) {
     std::string input = userInput;
@@ -166,6 +196,27 @@ std::string handleUserInput(const std::string& userInput) {
         std::getline(std::cin, searchQuery);
         wikipediaSearch(searchQuery);
         return "Searching Wikipedia for \"" + searchQuery + "\"...";
+    }
+    // Detect social media requests
+    else if (input.find("whatsapp") != std::string::npos) {
+        openWhatsApp();
+        return "Opening WhatsApp...";
+    }
+    else if (input.find("instagram") != std::string::npos) {
+        openInstagram();
+        return "Opening Instagram...";
+    }
+    else if (input.find("twitter") != std::string::npos) {
+        openTwitter();
+        return "Opening Twitter...";
+    }
+    else if (input.find("facebook") != std::string::npos) {
+        openFacebook();
+        return "Opening Facebook...";
+    }
+    else if (input.find("linkedin") != std::string::npos) {
+        openLinkedIn();
+        return "Opening LinkedIn...";
     }
 
     // Default response for unrecognized inputs
