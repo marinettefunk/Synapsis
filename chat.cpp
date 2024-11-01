@@ -3,9 +3,9 @@
 #include <algorithm>
 #include <chrono>
 #include <ctime>
-#include "formatting.h"  // Custom formatting like fadeIn, message, etc.
-#include "welcome.h"
+#include "formatting.h"
 #include "menu.h"
+#include "welcome.h"
 #include "profile.h"
 #include "files.h"
 
