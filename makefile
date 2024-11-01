@@ -1,5 +1,5 @@
-main: welcome.o main.o profile.o menu.o formatting.o files.o chat.o
-	g++ -std=c++17 welcome.o main.o profile.o menu.o formatting.o files.o chat.o -o main
+SYNAPSIS: welcome.o main.o profile.o menu.o formatting.o files.o chat.o
+	g++ -std=c++17 welcome.o main.o profile.o menu.o formatting.o files.o chat.o -o SYNAPSIS
 
 welcome.o: welcome.cpp welcome.h formatting.h
 	g++ -c -std=c++17 welcome.cpp
@@ -23,7 +23,7 @@ chat.o: chat.cpp chat.h files.h profile.h formatting.h welcome.h menu.h
 	g++ -c -std=c++17 chat.cpp
 
 clean:
-	rm -f *.o main
+	rm -f *.o SYNAPSIS
 
-all: main
-	./main
+all: SYNAPSIS
+	./SYNAPSIS
