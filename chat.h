@@ -22,7 +22,6 @@ void wikipediaSearch(const std::string& query);   // Performs a Wikipedia search
 // Social Media Functions.
 void openWhatsApp();      // Opens WhatsApp.
 void openInstagram();     // Opens Instagram.
-void openTwitter();       // Opens Twitter.
 void openFacebook();      // Opens Facebook.
 void openLinkedIn();      // Opens LinkedIn.
 
