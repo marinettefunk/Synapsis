@@ -20,7 +20,7 @@
 #define OPEN_COMMAND "powershell.exe /c start "  // For WSL on Windows
 #endif
 
-// Function to URL encode the search query
+// Function to URL encode the search query.
 std::string urlEncode(const std::string& query) {
     std::string encoded;
     for (char c : query) {
@@ -37,35 +37,35 @@ std::string urlEncode(const std::string& query) {
     return encoded;
 }
 
-// Function to perform a Google search
+// Function to perform a Google search.
 void googleSearch(const std::string& query) {
     std::string encodedQuery = urlEncode(query);
     std::string url = "https://www.google.com/search?q=" + encodedQuery;
     system((OPEN_COMMAND + url).c_str());
 }
 
-// Function to perform a YouTube search
+// Function to perform a YouTube search.
 void youtubeSearch(const std::string& query) {
     std::string encodedQuery = urlEncode(query);
     std::string url = "https://www.youtube.com/results?search_query=" + encodedQuery;
     system((OPEN_COMMAND + url).c_str());
 }
 
-// Function to perform a Spotify search
+// Function to perform a Spotify search.
 void spotifySearch(const std::string& query) {
     std::string encodedQuery = urlEncode(query);
     std::string url = "https://open.spotify.com/search/" + encodedQuery;
     system((OPEN_COMMAND + url).c_str());
 }
 
-// Function to perform a Wikipedia search
+// Function to perform a Wikipedia search.
 void wikipediaSearch(const std::string& query) {
     std::string encodedQuery = urlEncode(query);
     std::string url = "https://en.wikipedia.org/wiki/Special:Search?search=" + encodedQuery;
     system((OPEN_COMMAND + url).c_str());
 }
 
-// Function to open WhatsApp
+// Function to open WhatsApp.
 void openWhatsApp() {
     std::string url = "https://web.whatsapp.com";
     system((OPEN_COMMAND + url).c_str());
@@ -77,36 +77,36 @@ void openInstagram() {
     system((OPEN_COMMAND + url).c_str());
 }
 
-// Function to open Twitter
+// Function to open Twitter.
 void openTwitter() {
     std::string url = "https://twitter.com";
     system((OPEN_COMMAND + url).c_str());
 }
 
-// Function to open Facebook
+// Function to open Facebook.
 void openFacebook() {
     std::string url = "https://www.facebook.com";
     system((OPEN_COMMAND + url).c_str());
 }
 
-// Function to open LinkedIn
+// Function to open LinkedIn.
 void openLinkedIn() {
     std::string url = "https://www.linkedin.com";
     system((OPEN_COMMAND + url).c_str());
 }
 
-// Function to detect keywords and respond accordingly
+// Function to detect keywords and respond accordingly.
 std::string handleUserInput(const std::string& userInput) {
     std::string input = userInput;
     std::transform(input.begin(), input.end(), input.begin(), ::tolower);  // Case-insensitive comparison
 
-    // Detect greetings
+    // Detect greetings.
     if (input.find("hello") != std::string::npos || 
         input.find("hi") != std::string::npos || 
         input.find("hey") != std::string::npos) {
         return "SYNAPSIS: Hello! How can I assist you today?\n";
     } 
-    // Detect "how are you" inquiry
+    // Detect "how are you" inquiry.
     else if (input.find("how are you") != std::string::npos ||
              input.find("hi how are you") != std::string::npos ||
              input.find("hello how are you") != std::string::npos ||
@@ -114,7 +114,7 @@ std::string handleUserInput(const std::string& userInput) {
              input.find("how do you feel") != std::string::npos) {
         return "SYNAPSIS: I'm just a virtual assistant, but thanks for asking! I'm here and ready to help you, how can I assist?\n";
     }
-    // Detect farewell
+    // Detect farewell.
     else if (input.find("bye") != std::string::npos || 
              input.find("goodbye") != std::string::npos || 
              input.find("see you") != std::string::npos ||
@@ -124,7 +124,7 @@ std::string handleUserInput(const std::string& userInput) {
         std::cout << "SYNAPSIS: " << farewellMessage << std::endl; // Directly print without fade effect
         exit(0);  // Exit the program after displaying the message
     }
-    // Respond to questions about Synapsis
+    // Respond to questions about SYNAPSIS.
     else if (input.find("who") != std::string::npos || 
              input.find("tell me about yourself") != std::string::npos ||
              input.find("yourself") != std::string::npos || 
@@ -132,7 +132,7 @@ std::string handleUserInput(const std::string& userInput) {
         return "SYNAPSIS: I am SYNAPSIS, your digital assistant here to help you! I am designed to assist with tasks like file management, "
                "opening apps, and more. Just type your queries, and I'll do my best to assist you!\n";
     }
-    // Detect date
+    // Detect date.
     else if (input.find("date") != std::string::npos || 
              input.find("time") != std::string::npos || 
              input.find("day") != std::string::npos) {
@@ -142,6 +142,7 @@ std::string handleUserInput(const std::string& userInput) {
         dateResponse.erase(dateResponse.size() - 1); // Remove the newline character
         return "SYNAPSIS: " + dateResponse + "\n";
     }
+    // Detect Profile Settings changes.
     else if (input.find("name") != std::string::npos || 
              input.find("password") != std::string::npos || 
              input.find("profile") != std::string::npos) {
@@ -150,6 +151,7 @@ std::string handleUserInput(const std::string& userInput) {
         profileSettings(name, password);
         return "SYNAPSIS: Opening the Profile Settings Menu...\n";
     }
+    // Detect using File Organiser App.
     else if (input.find("file") != std::string::npos || 
              input.find("folder") != std::string::npos || 
              input.find("document") != std::string::npos ||
@@ -159,12 +161,13 @@ std::string handleUserInput(const std::string& userInput) {
         fileOrganiserApp();        
         return "SYNAPSIS: Opening the File Organizer App...\n";
     } 
+    // Detect going to Main Menu.
     else if (input.find("main") != std::string::npos || 
              input.find("home") != std::string::npos ||  
              input.find("menu") != std::string::npos) {
         return "SYNAPSIS: Navigating to Main Menu...\n";
     } 
-    // Detect Google search request
+    // Detect Google search request.
     else if (input.find("google") != std::string::npos ||
              input.find("search") != std::string::npos) {
         std::cout << "SYNAPSIS: What would you like to search for? ";
@@ -173,7 +176,7 @@ std::string handleUserInput(const std::string& userInput) {
         googleSearch(searchQuery);
         return "SYNAPSIS: Searching Google for \"" + searchQuery + "\"...\n";
     }
-    // Detect YouTube search request
+    // Detect YouTube search request.
     else if (input.find("youtube") != std::string::npos) {
         std::cout << "SYNAPSIS: What would you like to search for on YouTube? ";
         std::string searchQuery;
@@ -181,7 +184,7 @@ std::string handleUserInput(const std::string& userInput) {
         youtubeSearch(searchQuery);
         return "SYNAPSIS: Searching YouTube for \"" + searchQuery + "\"...\n";
     }
-    // Detect Spotify search request
+    // Detect Spotify search request.
     else if (input.find("spotify") != std::string::npos) {
         std::cout << "SYNAPSIS: What would you like to search for on Spotify? ";
         std::string searchQuery;
@@ -189,7 +192,7 @@ std::string handleUserInput(const std::string& userInput) {
         spotifySearch(searchQuery);
         return "SYNAPSIS: Searching Spotify for \"" + searchQuery + "\"...\n";
     }
-    // Detect Wikipedia search request
+    // Detect Wikipedia search request.
     else if (input.find("wikipedia") != std::string::npos) {
         std::cout << "SYNAPSIS: What would you like to search for on Wikipedia? ";
         std::string searchQuery;
@@ -197,7 +200,7 @@ std::string handleUserInput(const std::string& userInput) {
         wikipediaSearch(searchQuery);
         return "SYNAPSIS: Searching Wikipedia for \"" + searchQuery + "\"...\n";
     }
-    // Detect social media requests
+    // Detect social media requests.
     else if (input.find("whatsapp") != std::string::npos) {
         openWhatsApp();
         return "SYNAPSIS: Opening WhatsApp...\n";
@@ -219,29 +222,23 @@ std::string handleUserInput(const std::string& userInput) {
         return "SYNAPSIS: Opening LinkedIn...\n";
     }
 
-    // Default response for unrecognized inputs
+    // Default response for unrecognized inputs.
     return "I'm here to help! Feel free to ask me anything.";
 }
 
-// Main ChatBot function
+// Main ChatBot function.
 void ChatBot() {
     std::string userInput;
-    system(CLEAR_COMMAND);  // Clear console based on OS
-    message();  // Initial welcome message
+    system(CLEAR_COMMAND);  // Clear console based on OS.
+    message();  // Initial welcome message.
 
     while (true) {
-        std::cout << ">>>>> ";  // User input prompt
+        std::cout << ">>>>> ";  // User input prompt.
         std::getline(std::cin, userInput);
 
-        // Exit if the user wants to leave
-        if (userInput == "exit") {
-            std::cout << "SYNAPSIS: Goodbye!\n";
-            break;
-        }
-
-        // Get and display the response
+        // Get and display the response.
         std::string response = handleUserInput(userInput);
-        if (!response.empty()) {  // Avoid printing if the response is empty
+        if (!response.empty()) {  // Avoid printing if the response is empty.
             std::cout << response << std::endl;
         }
     }

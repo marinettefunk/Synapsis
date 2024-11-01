@@ -4,13 +4,13 @@
 #include <cstdlib>
 #include <filesystem>
 #include <vector>
-#include <iomanip> // For column formatting
-#include <limits> // For ignoring input limits
+#include <iomanip>
+#include <limits>
 #include <algorithm>
 #include <exception>
-#include <chrono> // For time handling
-#include <ctime> // For converting time to readable format
-#include <sstream> // For string stream
+#include <chrono>
+#include <ctime>
+#include <sstream>
 #include "formatting.h"
 #include "welcome.h"
 #include "menu.h"
@@ -24,7 +24,7 @@
 
 namespace fs = std::filesystem;
 
-// Utility function to format file sizes
+// Utility function to format file sizes.
 std::string formatFileSize(uintmax_t size) {
     const char* sizes[] = {"B", "KB", "MB", "GB", "TB"};
     int i = 0;
@@ -38,7 +38,7 @@ std::string formatFileSize(uintmax_t size) {
     return out.str();
 }
 
-// Display Current Directory Path
+// Display Current Directory Path.
 void displayCurrentDirectory(const fs::path& currentPath) {
     printBorder("CURRENT DIRECTORY");
     std::cout << "Current Directory: " << currentPath << "\n" << std::endl;
@@ -81,10 +81,10 @@ std::string getFileType(const fs::path& path) {
     else if (path.extension() == ".go") fileType = "[GO FILE]";
     else if (path.extension() == ".kt") fileType = "[KOTLIN FILE]";
     else if (path.extension() == ".scala") fileType = "[SCALA FILE]";
-    // Add more conditions for other extensions as needed
+    // Add more conditions for other extensions as needed.
     else fileType = "[OTHER FILE]";
 
-    // Truncate the string to a maximum length of 15 characters
+    // Truncate the string to a maximum length of 15 characters.
     if (fileType.length() > 15) {
         fileType = fileType.substr(0, 12) + "...";
     }
@@ -92,7 +92,7 @@ std::string getFileType(const fs::path& path) {
     return fileType;
 }
 
-// Function to list current directory contents
+// Function to list current directory contents.
 void listCurrentDirectory(const fs::path& currentPath) {
     try {
         // Column headers
@@ -129,9 +129,9 @@ fs::path navigateToDirectory(const fs::path& currentPath) {
     std::getline(std::cin, input);
 
     if (input == "..") {
-        return currentPath.parent_path(); // Go up to the parent directory
+        return currentPath.parent_path(); // Go up to the parent directory.
     } else if (input == ".") {
-        // List subdirectories and let the user choose one to go down
+        // List subdirectories and let the user choose one to go down.
         std::cout << "Subdirectories:" << std::endl;
         for (const auto& entry : fs::directory_iterator(currentPath)) {
             if (entry.is_directory()) {
@@ -142,23 +142,23 @@ fs::path navigateToDirectory(const fs::path& currentPath) {
         std::getline(std::cin, input);
         fs::path newPath = currentPath / input;
         if (fs::exists(newPath) && fs::is_directory(newPath)) {
-            return newPath; // Return the new path if it exists and is a directory
+            return newPath; // Return the new path if it exists and is a directory.
         } else {
             std::cerr << "Error: Directory not found. Please note that spelling and case must be exact." << std::endl;
-            return currentPath; // Stay in the current directory
+            return currentPath; // Stay in the current directory.
         }
     } else {
         fs::path newPath = currentPath / input;
         if (fs::exists(newPath) && fs::is_directory(newPath)) {
-            return newPath; // Return the new path if it exists and is a directory
+            return newPath; // Return the new path if it exists and is a directory.
         } else {
             std::cerr << "Error: Directory not found. Please note that spelling and case must be exact." << std::endl;
-            return currentPath; // Stay in the current directory
+            return currentPath; // Stay in the current directory.
         }
     }
 }
 
-// Rename File
+// Rename File function.
 void renameFile(const fs::path& currentPath) {
     system(CLEAR_COMMAND);
     printBorder("RENAME FILE");
@@ -213,7 +213,7 @@ void renameFile(const fs::path& currentPath) {
     }
 }
 
-// Delete File
+// Delete File function.
 void deleteFile(const fs::path& currentPath) {
     system(CLEAR_COMMAND);
     printBorder("DELETE FILE");
@@ -226,7 +226,7 @@ void deleteFile(const fs::path& currentPath) {
         std::cout << ">>>>> Enter the file name to delete: ";
         std::getline(std::cin, fileName);
 
-        // Check if the file exists in the directory
+        // Check if the file exists in the directory.
         if (!fs::exists(currentPath / fileName)) {
             std::cout << "Error: File '" << fileName << "' not found in the directory. Please note that spelling and case must be exact." << std::endl;
             continue;
@@ -263,6 +263,7 @@ void deleteFile(const fs::path& currentPath) {
     pauseForReturn();
 }
 
+// Function to copy file or directory.
 void copyFileOrDir(fs::path& currentPath) {
     system(CLEAR_COMMAND);
     printBorder("COPY FILE");
@@ -276,18 +277,18 @@ void copyFileOrDir(fs::path& currentPath) {
         std::string source;
         std::getline(std::cin, source);
 
-        // Check if the source file or directory exists
+        // Check if the source file or directory exists.
         if (!fs::exists(currentPath / source)) {
             std::cout << "Error: Source '" << source << "' not found in the directory. Please note that spelling and case must be exact." << std::endl;
             continue;
         }
 
-        // Check if the source is a file or directory
+        // Check if the source is a file or directory.
         if (fs::is_directory(currentPath / source)) {
-            // Get the absolute path of the source directory
+            // Get the absolute path of the source directory.
             sourcePath = fs::absolute(currentPath / source);
         } else if (fs::is_regular_file(currentPath / source)) {
-            // Get the absolute path of the source file
+            // Get the absolute path of the source file.
             sourcePath = fs::absolute(currentPath / source);
         } else {
             std::cout << "Error: Source '" << source << "' is not a file or directory." << std::endl;
@@ -319,7 +320,7 @@ void copyFileOrDir(fs::path& currentPath) {
         }
     }
 
-    // Check if the destination directory exists
+    // Check if the destination directory exists.
     if (!fs::exists(destination)) {
         std::cout << "Error: Destination directory '" << destination.string() << "' does not exist." << std::endl;
         return;
@@ -358,7 +359,7 @@ void copyFileOrDir(fs::path& currentPath) {
     pauseForReturn();
 }
 
-// Move File or Directory
+// Function to move file or directory.
 void moveFileOrDir(fs::path& currentPath) {
     system(CLEAR_COMMAND);
     printBorder("MOVE FILE");
@@ -372,18 +373,18 @@ void moveFileOrDir(fs::path& currentPath) {
         std::string source;
         std::getline(std::cin, source);
 
-        // Check if the source file or directory exists
+        // Check if the source file or directory exists.
         if (!fs::exists(currentPath / source)) {
             std::cout << "Error: Source '" << source << "' not found in the directory. Please note that spelling and case must be exact." << std::endl;
             continue;
         }
 
-        // Check if the source is a file or directory
+        // Check if the source is a file or directory.
         if (fs::is_directory(currentPath / source)) {
-            // Get the absolute path of the source directory
+            // Get the absolute path of the source directory.
             sourcePath = fs::absolute(currentPath / source);
         } else if (fs::is_regular_file(currentPath / source)) {
-            // Get the absolute path of the source file
+            // Get the absolute path of the source file.
             sourcePath = fs::absolute(currentPath / source);
         } else {
             std::cout << "Error: Source '" << source << "' is not a file or directory." << std::endl;
@@ -406,7 +407,7 @@ void moveFileOrDir(fs::path& currentPath) {
             displayCurrentDirectory(currentPath);
             listCurrentDirectory(currentPath);
             std::cout << std::endl;
-            continue; // Refresh the loop to display the new directory contents
+            continue; // Refresh the loop to display the new directory contents.
         } else if (userInput == "stay") {
             destination = currentPath;
             break;
@@ -415,7 +416,7 @@ void moveFileOrDir(fs::path& currentPath) {
         }
     }
 
-    // Check if the destination directory exists
+    // Check if the destination directory exists.
     if (!fs::exists(destination)) {
         std::cout << "Error: Destination directory '" << destination.string() << "' does not exist." << std::endl;
         return;
@@ -429,7 +430,7 @@ void moveFileOrDir(fs::path& currentPath) {
 
         if (confirm == 'y' || confirm == 'Y') {
             try {
-                // Check if the source and destination are the same
+                // Check if the source and destination are the same.
                 if (sourcePath == destination) {
                     std::cout << "Error: Source and destination are the same." << std::endl;
                     continue;
@@ -455,7 +456,7 @@ void moveFileOrDir(fs::path& currentPath) {
 }
 
 
-// Display Menu and Get User Choice
+// Display menu for File Organiser App.
 void printFileOrganiserMenu() {
     printBorder("WHAT DO YOU WANT TO DO?");
     std::cout << "1. Rename File\n"
@@ -465,7 +466,7 @@ void printFileOrganiserMenu() {
               << "5. Back to Main Menu" << std::endl;
 }
 
-// Main File Organiser Application Function
+// Main File Organiser Application Function.
 void fileOrganiserApp() {
     fs::path currentPath = fs::current_path(); // Set current directory.
     
@@ -480,7 +481,7 @@ void fileOrganiserApp() {
         printFileOrganiserMenu();
         std::cout << std::endl;
 
-        // Add option to navigate directories
+        // Add option to navigate directories.
         std::cout << "First, navigate or stay in desired directory:" << std::endl;
         std::cout << ">>>>> Enter 'navigate' to change directory, or choose an option: ";
         
@@ -489,16 +490,16 @@ void fileOrganiserApp() {
 
         if (userInput == "navigate") {
             currentPath = navigateToDirectory(currentPath);
-            continue; // Refresh the loop to display the new directory contents
+            continue; // Refresh the loop to display the new directory contents.
         }
 
         int choice;
         try {
-            choice = std::stoi(userInput); // Convert string input to int
+            choice = std::stoi(userInput); // Convert string input to int.
         } catch (...) {
             std::cout << "Invalid choice. Please enter a number or 'navigate'." << std::endl;
             system("pause");
-            continue; // Go back to the start of the loop
+            continue; // Go back to the start of the loop.
         }
 
         // Validate the choice
@@ -522,11 +523,11 @@ void fileOrganiserApp() {
                 moveFileOrDir(currentPath);
                 break;
             case 5:
-    std::string name, password;
-    loadUserData(name, password);
-    printMenu(name);
-    break;
+                std::string name, password;
+                loadUserData(name, password);
+                printMenu(name);
+                break;
         }
-        system("pause"); // Wait for user input before continuing
+        system("pause"); // Wait for user input before continuing.
     }
 }
