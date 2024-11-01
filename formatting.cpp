@@ -1,4 +1,3 @@
-
 #include <iostream>
 #include <iomanip>
 #include <string>
@@ -12,32 +11,26 @@
     #include <unistd.h>
 #endif
 
+// Function to get the width of the console window.
 int getConsoleWidth() {
     #if defined(_WIN32) || defined(_WIN64)
         CONSOLE_SCREEN_BUFFER_INFO csbi;
+        // Retrieve console screen buffer information.
         if (GetConsoleScreenBufferInfo(GetStdHandle(STD_OUTPUT_HANDLE), &csbi)) {
             return csbi.srWindow.Right - csbi.srWindow.Left + 1;
         }
     #else
         struct winsize w;
+        // Use ioctl to get window size on Unix-like systems.
         if (ioctl(STDOUT_FILENO, TIOCGWINSZ, &w) == 0) {
             return w.ws_col;
         }
     #endif
-        // Default width if unable to detect
-        return 80;
-}
-void centerText(const std::string& text) {
-    int width = getConsoleWidth();
-    int padding = (width - text.length()) / 2;
-    std::cout << std::string(padding, ' ') << text << std::string(width - text.length() - padding, ' ') << std::endl;
+    // Default width if unable to detect.
+    return 80;
 }
 
-std::string getCenteredText(const std::string& text) {
-    int width = getConsoleWidth();
-    int padding = (width - text.length()) / 2;
-    return std::string(padding, ' ') + text + std::string(width - text.length() - padding, ' ');
-}
+// Fuction to apply fade-in effect on text.
 std::string fadeIn(const std::string& text) {
     // Print line with each character gradually appearing
     for (size_t i = 0; i < text.length(); ++i) {
@@ -47,6 +40,8 @@ std::string fadeIn(const std::string& text) {
     std::cout << std::endl;
     return text; // Return the original text
 }
+
+//Function to apply a border to text.
 void printBorder(const std::string& message) {
     int length = message.length();
 
@@ -68,26 +63,27 @@ void printBorder(const std::string& message) {
     std::cout << "╯" << std::endl;
 }
 
+//Function to get the local time.
 void dateTime() {
-    // Declaring argument for time() 
+    // Declaring argument for time().
     time_t tt;
 
-    // Declaring variable to store return value of localtime() 
+    // Declaring variable to store return value of localtime(). 
     struct tm* ti;
 
-    // Applying time() 
+    // Applying time(). 
     time(&tt);
 
-    // Using localtime() 
+    // Using localtime(). 
     ti = localtime(&tt);
 
-    // Get the length of the date and time string
+    // Get the length of the date and time string.
     std::string dateTimeStr = asctime(ti);
 
-    // Get the console width
+    // Get the console width.
     int consoleWidth = getConsoleWidth();
 
-    // Print the date and time, aligned to the right
+    // Print the date and time, aligned to the right.
     std::cout << std::setw(consoleWidth) << std::right << dateTimeStr;
 }
 

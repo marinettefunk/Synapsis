@@ -3,27 +3,41 @@
 #include <string>
 #include <limits>
 #include "formatting.h"
-#include "errors.h"
 #include "profile.h"
 #include "files.h"
 #include "welcome.h"
 #include "chat.h"
 
+#ifdef _WIN32
+#define CLEAR_COMMAND "cls"
+#else
+#define CLEAR_COMMAND "clear"
+#endif
+
+// Input validation when choosing option from Main Menu.
 int choice() {
     int choice;
     std::cout << ">>>>>> Enter your choice: ";
     std::cin >> choice;
 
-    while (std::cin.fail() || choice < 1 || choice > 5) {
-        inputError("Invalid input. Please enter a number between 1 and 5.");
+    while (std::cin.fail() || choice < 1 || choice > 4) {
+        if (std::cin.fail()) {
+            std::cerr << "Error: Invalid input. Please enter a number." << std::endl;
+            std::cin.clear();
+            std::cin.ignore(std::numeric_limits<std::streamsize>::max(), '\n');
+        } else {
+            std::cerr << "Error: Invalid choice. Please enter a number between 1 and 4." << std::endl;
+        }
         std::cout << ">>>>>> Enter your choice: ";
         std::cin >> choice;
     }
 
     return choice;
 }
-void printMenu (const std::string& name) {
 
+// Function to print Main Menu.
+void printMenu (const std::string& name) {
+    system(CLEAR_COMMAND);
     dateTime();
     printLogo();
     std::cout << std::endl;
@@ -57,7 +71,7 @@ void printMenu (const std::string& name) {
             exit(0);
             break;           
         default:
-            std::cout << "Invalid choice." << std::endl;
+            std::cout << "Invalid input. Please enter a number between 1 and 4." << std::endl;
             break;
     }
 }

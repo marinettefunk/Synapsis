@@ -5,7 +5,6 @@
 #include "formatting.h"
 #include "welcome.h"
 #include "menu.h"
-#include "errors.h"
 
 #ifdef _WIN32
 #define CLEAR_COMMAND "cls"
@@ -16,26 +15,36 @@
 // Function to save user data to a file.
 void saveUserData(const std::string& name, const std::string& password) {
     std::ofstream file("user_data.txt");
-    if (file.is_open()) {
-        file << name << std::endl;
-        file << password << std::endl;
-        file.close();
-    } else {
-        inputError("Error: Unable to open file for saving user data.");
+    if (!file.is_open()) {
+        std::cerr << "Error: Unable to open file for saving user data." << std::endl;
+        return;
+    }
+
+    file << name << std::endl;
+    file << password << std::endl;
+    file.close();
+
+    if (!file.good()) {
+        std::cerr << "Error: Unable to write to file." << std::endl;
     }
 }
 
 // Function to load user data from a file.
 void loadUserData(std::string& name, std::string& password) {
     std::ifstream file("user_data.txt");
-    if (file.is_open()) {
-        std::getline(file, name);
-        std::getline(file, password);
-        file.close();
-    } else {
-        inputError("Error: Unable to open file to load user data. Starting with blank profile.");
+    if (!file.is_open()) {
+        std::cerr << "Error: Unable to open file to load user data. Starting with blank profile." << std::endl;
         name = "";
         password = "";
+        return;
+    }
+
+    std::getline(file, name);
+    std::getline(file, password);
+    file.close();
+
+    if (!file.good()) {
+        std::cerr << "Error: Unable to read from file." << std::endl;
     }
 }
 
@@ -60,7 +69,7 @@ void nameConfirmation(std::string& name) {
         } else if (confirm == 'n' || confirm == 'N') {
             name = getName();
         } else {
-           std::cout << "Invalid input. Please enter 'y' or 'n'." << std::endl;
+            std::cerr << "Invalid input. Please enter 'y' or 'n'." << std::endl;
         }
     }
 }
@@ -72,15 +81,13 @@ std::string getPassword() {
     std::getline(std::cin, password);
 
     while (true) {
-        std::cout << ">>>>> Re-enter your password: ";
+        std::cout << ">>>>> Re-enter your password: "; // Password needs to be confirmed.
         std::getline(std::cin, confirmPassword);
 
         if (confirmPassword == password) {
             break;
         } else {
-            std::cout << "Passwords do not match. Please try again." << std::endl;
-            std::cout << ">>>>> Re-enter your password: ";
-            std::getline(std::cin, confirmPassword);
+            std::cerr << "Passwords do not match. Please try again." << std::endl;
         }
     }
 
@@ -99,7 +106,7 @@ void createProfile(std::string& name, std::string& password) {
 
     std::cout << "Profile created successfully!" << std::endl;
     if (system(CLEAR_COMMAND) != 0) {
-        inputError("Failed to clear the screen.");
+        std::cerr << "Error: Failed to clear the screen." << std::endl;
     }
 
     printMenu(name);
@@ -124,12 +131,12 @@ std::string runProgram() {
             if (inputPassword == password) {
                 loginSuccessful = true;
             } else {
-                std::cout << "Incorrect password. Please try again." << std::endl;
+                std::cerr << "Incorrect password. Please try again." << std::endl;
             }
         }
 
         if (system(CLEAR_COMMAND) != 0) {
-            inputError("Failed to clear the screen.");
+            std::cerr << "Error: Failed to clear the screen." << std::endl;
         }
     }
 
@@ -139,7 +146,7 @@ std::string runProgram() {
 // Function to display the Profile Settings Menu.
 void printProfileSettingsMenu() {
     if (system(CLEAR_COMMAND) != 0) {
-        inputError("Failed to clear the screen.");
+        std::cerr << "Error: Failed to clear the screen." << std::endl;
     }
     dateTime();
     printLogo();
@@ -153,11 +160,10 @@ void printProfileSettingsMenu() {
     std::cout << std::endl;
 }
 
-
 // Function to display the user's profile.
 void viewProfile(const std::string& name, const std::string& password) {
     if (system(CLEAR_COMMAND) != 0) {
-        inputError("Failed to clear the screen.");
+        std::cerr << "Error: Failed to clear the screen." << std::endl;
     }
     printBorder("VIEW PROFILE");
     std::cout << "Name: " << name << std::endl;
@@ -168,7 +174,7 @@ void viewProfile(const std::string& name, const std::string& password) {
 // Function to change the name of the user.
 void changeName(std::string& name, std::string& password) {
     if (system(CLEAR_COMMAND) != 0) {
-        inputError("Failed to clear the screen.");
+        std::cerr << "Error: Failed to clear the screen." << std::endl;
     }
     printBorder("CHANGE NAME");
 
@@ -189,7 +195,7 @@ void changeName(std::string& name, std::string& password) {
             std::cout << "Name change cancelled." << std::endl;
             break;
         } else {
-            std::cout << "Invalid input. Please enter 'y' or 'n'." << std::endl;
+            std::cerr << "Invalid input. Please enter 'y' or 'n'." << std::endl;
         }
     }
     pauseForReturn();
@@ -198,7 +204,7 @@ void changeName(std::string& name, std::string& password) {
 // Function to change the user's password.
 void changePassword(std::string& password, std::string& name) {
     if (system(CLEAR_COMMAND) != 0) {
-        inputError("Failed to clear the screen.");
+        std::cerr << "Error: Failed to clear the screen." << std::endl;
     }
     printBorder("CHANGE PASSWORD");
 
@@ -214,7 +220,7 @@ void changePassword(std::string& password, std::string& name) {
     } else if (confirm == 'n' || confirm == 'N') {
         std::cout << "Password change cancelled." << std::endl;
     } else {
-        std::cout << "Invalid input. Please enter 'y' or 'n'." << std::endl;
+        std::cerr << "Invalid input. Please enter 'y' or 'n'." << std::endl;
         changePassword(password, name);
     }
     pauseForReturn();
@@ -223,7 +229,7 @@ void changePassword(std::string& password, std::string& name) {
 // Function to delete the user's profile.
 void deleteProfile(std::string& name, std::string& password) {
     if (system(CLEAR_COMMAND) != 0) {
-        inputError("Failed to clear the screen.");
+        std::cerr << "Error: Failed to clear the screen." << std::endl;
     }
     printBorder("DELETE PROFILE");
 
@@ -244,7 +250,7 @@ void deleteProfile(std::string& name, std::string& password) {
             std::cout << "Profile deletion cancelled." << std::endl;
             break;
         } else {
-            std::cout << "Invalid input. Please enter 'y' or 'n'." << std::endl;
+            std::cerr << "Invalid input. Please enter 'y' or 'n'." << std::endl;
         }
     }
     pauseForReturn();
@@ -252,17 +258,12 @@ void deleteProfile(std::string& name, std::string& password) {
 
 // Main function to handle profile settings menu.
 void profileSettings(std::string& name, std::string& password) {
-    int choice;
-    do {
+    int choice = 0;
+
+    while (choice != 5) {
         printProfileSettingsMenu();
-        std::cout << ">>>>> Please select an option: ";
-        if (!(std::cin >> choice) || choice < 1 || choice > 5) {
-            inputError("Invalid input. Please enter a number between 1 and 5.");
-            std::cin.clear();
-            std::cin.ignore(std::numeric_limits<std::streamsize>::max(), '\n');
-            continue;
-        }
-        
+        std::cout << "Enter your choice: ";
+        std::cin >> choice;
         std::cin.ignore(std::numeric_limits<std::streamsize>::max(), '\n');
 
         switch (choice) {
@@ -282,7 +283,9 @@ void profileSettings(std::string& name, std::string& password) {
                 printMenu(name);
                 break;
             default:
-                std::cout << "Invalid input. Please enter a number between 1 and 5." << std::endl;
+                std::cerr << "Invalid choice. Please enter a number between 1 and 5." << std::endl;
+                pauseForReturn();
+                break;
         }
-    } while (choice != 5);
+    }
 }
