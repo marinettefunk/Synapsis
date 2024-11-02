@@ -1,47 +1,29 @@
-# Makefile for SYNAPSIS
+SYNAPSIS: welcome.o main.o profile.o menu.o formatting.o files.o chat.o
+	g++ -std=c++17 welcome.o main.o profile.o menu.o formatting.o files.o chat.o -o SYNAPSIS
 
-# Compiler and flags
-CXX = g++
-CXXFLAGS = -std=c++17
+welcome.o: welcome.cpp welcome.h formatting.h
+	g++ -c -std=c++17 welcome.cpp
 
-# Object files
-OBJECTS = welcome.o main.o profile.o menu.o formatting.o files.o chat.o
+profile.o: profile.cpp profile.h formatting.h welcome.h menu.h
+	g++ -c -std=c++17 profile.cpp
 
-# Executable name
-EXECUTABLE = SYNAPSIS
+main.o: main.cpp welcome.h profile.h menu.h
+	g++ -c -std=c++17 main.cpp
 
-# Build the executable
-$(EXECUTABLE): $(OBJECTS)
-	$(CXX) $(CXXFLAGS) $(OBJECTS) -o $(EXECUTABLE)
+menu.o: menu.cpp menu.h profile.h files.h chat.h
+	g++ -c -std=c++17 menu.cpp
 
-# Compile source files into object files
-%.o: %.cpp %.h
-	$(CXX) -c $(CXXFLAGS) $<
+formatting.o: formatting.cpp formatting.h welcome.h menu.h
+	g++ -c -std=c++17 formatting.cpp
 
-# Clean up build files
+files.o: files.cpp files.h profile.h formatting.h welcome.h menu.h
+	g++ -c -std=c++17 files.cpp
+
+chat.o: chat.cpp chat.h files.h profile.h formatting.h welcome.h menu.h
+	g++ -c -std=c++17 chat.cpp
+
 clean:
-	rm -f $(OBJECTS) $(EXECUTABLE)
+	rm -f *.o SYNAPSIS
 
-# Installation target
-install: $(EXECUTABLE)
-	@echo "Installing SYNAPSIS..."
-	@cp $(EXECUTABLE) /usr/local/bin/
-	@echo "SYNAPSIS installed successfully. You can run it using 'SYNAPSIS'."
-
-# Uninstall target
-uninstall:
-	@echo "Uninstalling SYNAPSIS..."
-	@rm -f /usr/local/bin/$(EXECUTABLE)
-	@echo "SYNAPSIS uninstalled successfully."
-
-# Help target
-help:
-	@echo "Makefile Commands:"
-	@echo "  make            Build the executable"
-	@echo "  make clean      Remove object files and executable"
-	@echo "  make install    Install SYNAPSIS to /usr/local/bin/"
-	@echo "  make uninstall  Remove SYNAPSIS from /usr/local/bin/"
-	@echo "  make help       Display this help message"
-
-# Default target
-all: $(EXECUTABLE)
+all: SYNAPSIS
+	./SYNAPSIS
