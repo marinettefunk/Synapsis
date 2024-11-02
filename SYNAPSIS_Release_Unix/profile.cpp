@@ -257,6 +257,8 @@ void deleteProfile(std::string& name, std::string& password) {
             password.clear();
             saveUserData(name, password);
             std::cout << "Profile deletion successful." << std::endl;
+            system (CLEAR_COMMAND);
+            message();
             createProfile(name, password);
             break;
         } else if (confirm == 'n' || confirm == 'N') {
