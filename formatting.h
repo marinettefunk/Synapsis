@@ -11,8 +11,8 @@
  * For inquiries, contact: marinettefunk@gmail.com
  */
 
-#ifndef UTILITIES_H
-#define UTILITIES_H
+#ifndef FORMATTING_H
+#define FORMATTING_H
 
 #include <string>
 #include <chrono>
@@ -35,4 +35,4 @@ void dateTime();
 // Utility function to pause and wait for user input before returning to the menu.
 void pauseForReturn();
 
-#endif  // UTILITIES_H
+#endif  // FORMATTING_H

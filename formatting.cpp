@@ -11,97 +11,56 @@
  * For inquiries, contact: marinettefunk@gmail.com
  */
 
+#ifndef FILES_H
+#define FILES_H
+
 #include <iostream>
-#include <iomanip>
 #include <string>
+#include <fstream>
+#include <cstdlib>
+#include <filesystem>
+#include <vector>
+#include <iomanip>
+#include <limits>
+#include <algorithm>
+#include <exception>
 #include <chrono>
-#include <thread>
+#include <ctime>
+#include <sstream>
 
-#if defined(_WIN32) || defined(_WIN64)
-    #include <windows.h>
-#else
-    #include <sys/ioctl.h>
-    #include <unistd.h>
-#endif
+namespace fs = std::filesystem;
 
-// Function to get the width of the console window.
-int getConsoleWidth() {
-    #if defined(_WIN32) || defined(_WIN64)
-        CONSOLE_SCREEN_BUFFER_INFO csbi;
-        // Retrieve console screen buffer information.
-        if (GetConsoleScreenBufferInfo(GetStdHandle(STD_OUTPUT_HANDLE), &csbi)) {
-            return csbi.srWindow.Right - csbi.srWindow.Left + 1;
-        }
-    #else
-        struct winsize w;
-        // Use ioctl to get window size on Unix-like systems.
-        if (ioctl(STDOUT_FILENO, TIOCGWINSZ, &w) == 0) {
-            return w.ws_col;
-        }
-    #endif
-    // Default width if unable to detect.
-    return 80;
-}
+// Utility function to format file sizes.
+std::string formatFileSize(uintmax_t size);
 
-// Fuction to apply fade-in effect on text.
-std::string fadeIn(const std::string& text) {
-    // Print line with each character gradually appearing
-    for (size_t i = 0; i < text.length(); ++i) {
-        std::cout << text[i] << std::flush;
-        std::this_thread::sleep_for(std::chrono::milliseconds(50)); // Adjust for speed
-    }
-    std::cout << std::endl;
-    return text; // Return the original text
-}
+// Display Current Directory Path.
+void displayCurrentDirectory(const fs::path& currentPath);
 
-//Function to apply a border to text.
-void printBorder(const std::string& message) {
-    int length = message.length();
+// Function to get the file type.
+std::string getFileType(const fs::path& path);
 
-    // Print top border with corners
-    std::cout << "╭";
-    for (int i = 0; i < length + 2; ++i) {
-        std::cout << "─";
-    }
-    std::cout << "╮" << std::endl;
+// Function to list current directory contents.
+void listCurrentDirectory(const fs::path& currentPath);
 
-    // Print message with side borders
-    std::cout << "│ " << message << " │" << std::endl;
+// Function for directory navigation.
+fs::path navigateToDirectory(const fs::path& currentPath);
 
-    // Print bottom border with corners
-    std::cout << "╰";
-    for (int i = 0; i < length + 2; ++i) {
-        std::cout << "─";
-    }
-    std::cout << "╯" << std::endl;
-}
+// Rename File function.
+void renameFile(const fs::path& currentPath);
 
-//Function to get the local time.
-void dateTime() {
-    // Declaring argument for time().
-    time_t tt;
+// Delete File function.
+void deleteFile(const fs::path& currentPath);
 
-    // Declaring variable to store return value of localtime(). 
-    struct tm* ti;
+// Function to copy file or directory.
+void copyFileOrDir(fs::path& currentPath);
 
-    // Applying time(). 
-    time(&tt);
+// Function to move file or directory.
+void moveFileOrDir(fs::path& currentPath);
 
-    // Using localtime(). 
-    ti = localtime(&tt);
+// Display menu for File Organiser App.
+void printFileOrganiserMenu();
 
-    // Get the length of the date and time string.
-    std::string dateTimeStr = asctime(ti);
+// Main File Organiser Application Function.
+void fileOrganiserApp();
 
-    // Get the console width.
-    int consoleWidth = getConsoleWidth();
-
-    // Print the date and time, aligned to the right.
-    std::cout << std::setw(consoleWidth) << std::right << dateTimeStr;
-}
-
-// Utility function to pause and wait for user input before returning to the menu.
-void pauseForReturn() {
-    std::cout << "\n>>>>> Press Enter to return to the menu <<<<<<";
-    std::cin.ignore(std::numeric_limits<std::streamsize>::max(), '\n');
-}
+#endif // FILES_H
