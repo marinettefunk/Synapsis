@@ -1,7 +1,16 @@
 # Synapsis
 A very simple Virtual Assistant written in C++ to work in the console of your system. This program serves as a versatile virtual assistant capable of handling various commands, managing user data, and performing tasks related to user tasks and interactions, basic file management, and more.
 
-Skills demonstated in this project:
+**Skills demonstated in this project:**
+
+️✅ C++ Looping
+️✅ C++ Error Handling
+️✅ Input Validation
+️✅ Console Output Formatting
+️✅ Various C++ libraries
+️✅ Cross-platform Compatibility
+️✅ Basic NLP with Bag-Of-Words
+
 ![SYNAPSIS Info Sheet](https://github.com/user-attachments/assets/fd0cdfc8-681b-411a-8265-31a6a9e2c58e)
 
 
@@ -24,7 +33,7 @@ Manage your user profile with registation, login and management capabilities.
    - Edit name and password
    - View your profile
    - Delete profile
-   - 
+     
 ### File Management
 Perform basic file operations such as:
 - Rename files or directories
