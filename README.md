@@ -40,6 +40,7 @@ Perform basic file operations such as:
 - Move/copy files and directories
 - Delete files or directories
 - Navigate directories
+
 ### ChatBot
 Receive and respond to user queries interactively in the console:
 - Greeting messages and commands
