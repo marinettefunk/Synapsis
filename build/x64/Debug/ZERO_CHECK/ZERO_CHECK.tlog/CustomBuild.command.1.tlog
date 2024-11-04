@@ -1,0 +1,10 @@
+^C:\USERS\MARIN\PROJECTS\SYNAPSIS\BUILD\CMAKEFILES\9F67F37DB8B77EA3094EEDEE7826089D\GENERATE.STAMP.RULE
+setlocal
+"C:\Program Files\CMake\bin\cmake.exe" -SC:/Users/marin/Projects/Synapsis -BC:/Users/marin/Projects/Synapsis/build --check-stamp-list CMakeFiles/generate.stamp.list --vs-solution-file C:/Users/marin/Projects/Synapsis/build/SYNAPSIS.sln
+if %errorlevel% neq 0 goto :cmEnd
+:cmEnd
+endlocal & call :cmErrorLevel %errorlevel% & goto :cmDone
+:cmErrorLevel
+exit /b %1
+:cmDone
+if %errorlevel% neq 0 goto :VCEnd
