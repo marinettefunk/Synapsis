@@ -241,9 +241,6 @@ void changePassword(std::string& password, std::string& name) {
 
 // Function to delete the user's profile.
 void deleteProfile(std::string& name, std::string& password) {
-    if (system(CLEAR_COMMAND) != 0) {
-        std::cerr << "Error: Failed to clear the screen." << std::endl;
-    }
     printBorder("DELETE PROFILE");
 
     char confirm;
@@ -257,7 +254,8 @@ void deleteProfile(std::string& name, std::string& password) {
             password.clear();
             saveUserData(name, password);
             std::cout << "Profile deletion successful." << std::endl;
-            system (CLEAR_COMMAND);
+            std::cout << std::endl; // Add a newline to separate the messages
+            system (CLEAR_COMMAND); // Move the system call here
             message();
             createProfile(name, password);
             break;
