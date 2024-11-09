@@ -55,6 +55,14 @@ Receive and respond to user queries interactively in the console:
 To set up the Virtual Assistant SYNAPSIS on your system, follow the steps below based on your operating system:
 
 ### Windows Installation
+
+#### Set Console to Display Characters Used in SYNAPSIS (UTF-8)
+1. Go to the Language Settings.
+2. Click Administrative Language Settings.
+3. Change System Locale.
+4. Tick the Beta: Use Unicode UTF-8 for worldwide language support option.
+5. Restart your computer.
+   
 #### Install
 1. Download 'SYNAPSIS-1.0-win64.exe'.
 2. Follow installation steps.
