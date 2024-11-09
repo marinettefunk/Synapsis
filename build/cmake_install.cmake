@@ -2,7 +2,7 @@
 
 # Set the install prefix
 if(NOT DEFINED CMAKE_INSTALL_PREFIX)
-  set(CMAKE_INSTALL_PREFIX "C:/Program Files (x86)/SYNAPSIS")
+  set(CMAKE_INSTALL_PREFIX "C:/Program Files/SYNAPSIS")
 endif()
 string(REGEX REPLACE "/$" "" CMAKE_INSTALL_PREFIX "${CMAKE_INSTALL_PREFIX}")
 
@@ -54,6 +54,10 @@ if(CMAKE_INSTALL_COMPONENT STREQUAL "Unspecified" OR NOT CMAKE_INSTALL_COMPONENT
   elseif(CMAKE_INSTALL_CONFIG_NAME MATCHES "^([Rr][Ee][Ll][Ww][Ii][Tt][Hh][Dd][Ee][Bb][Ii][Nn][Ff][Oo])$")
     include("C:/Users/marin/Projects/Synapsis/build/CMakeFiles/SYNAPSIS.dir/install-cxx-module-bmi-RelWithDebInfo.cmake" OPTIONAL)
   endif()
+endif()
+
+if(CMAKE_INSTALL_COMPONENT STREQUAL "Unspecified" OR NOT CMAKE_INSTALL_COMPONENT)
+  execute_process(COMMAND setx PATH "%PATH%;C:\Program Files/SYNAPSIS/bin")
 endif()
 
 if(CMAKE_INSTALL_COMPONENT)

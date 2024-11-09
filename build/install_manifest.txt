@@ -1,1 +1,1 @@
-C:/Program Files (x86)/SYNAPSIS/bin/SYNAPSIS.exe
+C:/Program Files/SYNAPSIS/bin/SYNAPSIS.exe
