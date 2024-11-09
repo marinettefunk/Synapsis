@@ -1,4 +1,5 @@
 C:/Users/marin/Projects/Synapsis/build/CMakeFiles/SYNAPSIS.dir
+C:/Users/marin/Projects/Synapsis/build/CMakeFiles/PACKAGE.dir
 C:/Users/marin/Projects/Synapsis/build/CMakeFiles/INSTALL.dir
 C:/Users/marin/Projects/Synapsis/build/CMakeFiles/ALL_BUILD.dir
 C:/Users/marin/Projects/Synapsis/build/CMakeFiles/ZERO_CHECK.dir

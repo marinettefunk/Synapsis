@@ -8,6 +8,8 @@ C:/Program Files/CMake/share/cmake-3.30/Modules/CMakeLanguageInformation.cmake
 C:/Program Files/CMake/share/cmake-3.30/Modules/CMakeRCInformation.cmake
 C:/Program Files/CMake/share/cmake-3.30/Modules/CMakeSystemSpecificInformation.cmake
 C:/Program Files/CMake/share/cmake-3.30/Modules/CMakeSystemSpecificInitialize.cmake
+C:/Program Files/CMake/share/cmake-3.30/Modules/CPack.cmake
+C:/Program Files/CMake/share/cmake-3.30/Modules/CPackComponent.cmake
 C:/Program Files/CMake/share/cmake-3.30/Modules/Compiler/CMakeCommonCompilerMacros.cmake
 C:/Program Files/CMake/share/cmake-3.30/Modules/Compiler/MSVC-C.cmake
 C:/Program Files/CMake/share/cmake-3.30/Modules/Compiler/MSVC-CXX.cmake
@@ -18,6 +20,7 @@ C:/Program Files/CMake/share/cmake-3.30/Modules/Platform/Windows-MSVC-CXX.cmake
 C:/Program Files/CMake/share/cmake-3.30/Modules/Platform/Windows-MSVC.cmake
 C:/Program Files/CMake/share/cmake-3.30/Modules/Platform/Windows.cmake
 C:/Program Files/CMake/share/cmake-3.30/Modules/Platform/WindowsPaths.cmake
+C:/Program Files/CMake/share/cmake-3.30/Templates/CPackConfig.cmake.in
 C:/Users/marin/Projects/Synapsis/CMakeLists.txt
 C:/Users/marin/Projects/Synapsis/build/CMakeFiles/3.30.5/CMakeCCompiler.cmake
 C:/Users/marin/Projects/Synapsis/build/CMakeFiles/3.30.5/CMakeCXXCompiler.cmake

@@ -68,3 +68,37 @@ message(STATUS "Commands:")
 message(STATUS "  cmake --build .      # Build the executable")
 message(STATUS "  cmake --install .    # Install SYNAPSIS to ${CMAKE_INSTALL_PREFIX}")
 message(STATUS "  cmake --build . --target clean # Clean up build files")
+
+# --- Start of CPack section ---
+
+# Include CPack module to enable packaging
+include(CPack)
+
+# Set the package version and name
+set(CPACK_PACKAGE_NAME "SYNAPSIS")
+set(CPACK_PACKAGE_VERSION "1.0")
+
+# Define the generator for creating Windows installer
+set(CPACK_GENERATOR "NSIS")  # NSIS (Nullsoft Scriptable Install System) for Windows
+
+# Set the install directory for the installer (this is the folder where the app will be installed on the user's machine)
+set(CPACK_PACKAGE_INSTALL_DIRECTORY "SYNAPSIS")
+
+# Add the files to be included in the installer (executable and all dependencies)
+set(CPACK_PACKAGE_FILE_NAME "SYNAPSIS-${CMAKE_PROJECT_VERSION}-win")
+
+# Define the uninstaller behavior for the Windows installer
+set(CPACK_NSIS_EXTRA_INSTALL_COMMANDS "
+    # Create uninstaller
+    WriteUninstaller \$INSTDIR\\uninstall.exe
+")
+
+# Set the uninstallation commands to be executed during uninstall
+set(CPACK_NSIS_EXTRA_UNINSTALL_COMMANDS "
+    # Remove installed files and directories
+    Delete \$INSTDIR\\bin\\SYNAPSIS.exe
+    RMDir \$INSTDIR\\bin
+    RMDir \$INSTDIR
+")
+
+# --- End of CPack section ---

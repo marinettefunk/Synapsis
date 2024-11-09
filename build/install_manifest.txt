@@ -1,1 +1,1 @@
-C:/Program Files/SYNAPSIS/bin/SYNAPSIS.exe
+C:/Users/marin/Projects/Synapsis/build/_CPack_Packages/win64/NSIS/SYNAPSIS-1.0-win64/bin/SYNAPSIS.exe
