@@ -87,9 +87,8 @@ If for some reason the uninstaller is not available, or you want to completely r
 By default, SYNAPSIS would be installed in the directory ```bash C:\Program Files\SYNAPSIS``` or ```bashC:\Program Files (x86)\SYNAPSIS``` (on a 32-bit system).
 2. Go to the installation directory and delete the entire SYNAPSIS folder.
 
-Remove from the PATH:
 
-If the installer added SYNAPSIS to your system's PATH environment variable, you may need to remove it manually.
+If the installer added SYNAPSIS to your system's PATH environment variable, you may need to remove it manually:
 1. Open the Environment Variables settings by searching for Environment Variables in the Start Menu.
 2. Under System Variables, find and select the Path variable, then click Edit.
 3. Look for any entries related to SYNAPSIS (such as the installation path) and remove them.
